@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'SFU Hackathon App',
-  description: 'A Next.js application for SFU Hackathon',
+  title: 'Transparency Ledger',
+  description: 'Disclosing companies\' actions towards politics',
 }
 
 export default function RootLayout({

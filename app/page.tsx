@@ -1,67 +1,111 @@
+'use client'
+
+import CompanyDirectory from './components/company-directory/CompanyDirectory'
+import Tabs, { type Tab } from './components/tabs/Tabs'
+import type { Company } from './components/company-directory/data'
+
 export default function Home() {
+  const handleSelectionChange = (selectedCompanies: Company[]) => {
+    console.log('Selected companies:', selectedCompanies)
+  }
+
+  const handleTabChange = (tabId: string) => {
+    console.log('Active tab changed to:', tabId)
+  }
+
+  const tabs: Tab[] = [
+    {
+      id: 'companies',
+      label: 'Companies',
+      content: (
+        <div className="card-elevated p-4 sm:p-6">
+          <CompanyDirectory selectable={false} />
+        </div>
+      )
+    },
+    {
+      id: 'analytics',
+      label: 'Analytics',
+      content: (
+        <div className="card-elevated p-4 sm:p-6">
+          <div className="text-center py-12">
+            <h3 className="text-2xl font-bold mb-4">Analytics Dashboard</h3>
+            <p className="text-muted-foreground">Coming soon - detailed analytics and insights</p>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'reports',
+      label: 'Reports',
+      content: (
+        <div className="card-elevated p-4 sm:p-6">
+          <div className="text-center py-12">
+            <h3 className="text-2xl font-bold mb-4">Reports</h3>
+            <p className="text-muted-foreground">Generate and download transparency reports</p>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'settings',
+      label: 'Settings',
+      content: (
+        <div className="card-elevated p-4 sm:p-6">
+          <div className="text-center py-12">
+            <h3 className="text-2xl font-bold mb-4">Settings</h3>
+            <p className="text-muted-foreground">Configure your preferences and notifications</p>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'help',
+      label: 'Help & Support',
+      content: (
+        <div className="card-elevated p-4 sm:p-6">
+          <div className="text-center py-12">
+            <h3 className="text-2xl font-bold mb-4">Help & Support</h3>
+            <p className="text-muted-foreground">Get help and contact our support team</p>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'about',
+      label: 'About',
+      content: (
+        <div className="card-elevated p-4 sm:p-6">
+          <div className="text-center py-12">
+            <h3 className="text-2xl font-bold mb-4">About Transparency Ledger</h3>
+            <p className="text-muted-foreground">Learn more about our mission and values</p>
+          </div>
+        </div>
+      )
+    }
+  ]
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          SFU Hackathon App
-        </p>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <h1 className="text-6xl font-bold text-center">
-          Welcome to{' '}
-          <span className="text-blue-600">SFU Hackathon</span>
-        </h1>
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h2 className="mb-3 text-2xl font-semibold">
-            Getting Started{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Start building your hackathon project with Next.js and TypeScript.
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
+      <div className="container mx-auto px-6 py-12">
+        <div className="text-center mb-12 animate-slide-up">
+          <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
+            <span className="text-sm font-medium text-primary">Political Transparency</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <span className="gradient-text">Transparency Ledger</span>
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Disclosing companies' actions and influence towards politics
           </p>
         </div>
 
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js features and API.
-          </p>
-        </div>
-
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </div>
-
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50 text-balance">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </div>
+        <Tabs 
+          tabs={tabs} 
+          defaultActiveTab="companies"
+          onTabChange={handleTabChange}
+          className="max-w-5xl mx-auto"
+        />
       </div>
     </main>
   )
