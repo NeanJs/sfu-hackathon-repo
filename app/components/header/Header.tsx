@@ -16,12 +16,14 @@ export default function Header() {
   const links = useMemo(() => NAV_LINKS, [])
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-700/40 bg-gradient-to-r from-slate-800/40 to-slate-700/40 backdrop-blur-xl shadow-lg">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-600/30 bg-gradient-to-r from-slate-600/30 to-slate-500/30 backdrop-blur-xl shadow-lg">
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="inline-flex items-center gap-2 select-none">
-            <Image src="/images/LeadgerCropHeader.png" alt="Leadger" width={222} height={48} priority className="h-8 md:h-12 w-auto" />
-          </Link>
+        <div className="flex h-16 items-center justify-between md:justify-between">
+          <div className="flex-1 md:flex-none">
+            <Link href="/" className="inline-flex items-center gap-2 select-none justify-center md:justify-start w-full md:w-auto">
+              <Image src="/images/LeadgerCropHeader.png" alt="Leadger" width={222} height={48} priority className="h-8 md:h-12 w-auto" />
+            </Link>
+          </div>
 
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-center gap-2" aria-label="Primary">
@@ -44,7 +46,7 @@ export default function Header() {
             
             <button
               onClick={open}
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white transition-all duration-200 backdrop-blur-sm"
+              className="hidden md:flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white transition-all duration-200 backdrop-blur-sm"
               aria-label="Open search"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
