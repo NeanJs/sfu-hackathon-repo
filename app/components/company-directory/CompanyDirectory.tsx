@@ -3,6 +3,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Search } from 'lucide-react'
 import type { Company, CompanyCategory } from './data'
 import { queryCompanies, getDiscoveryListTitle, getCategories } from './data'
 import { Skeleton } from '../skeleton'
@@ -201,7 +202,7 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
   }
 
   return (
-    <section aria-label="Company Directory" className="mx-auto w-full max-w-5xl">
+    <section aria-label="Company Directory" className="mx-auto w-full">
       <div className="mb-4 sm:mb-6 flex items-end justify-between gap-3">
         <div className="w-full">
           <label htmlFor="company-search" className="block text-sm font-medium mb-2">Search companies</label>
@@ -215,7 +216,7 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
               className="w-full rounded-xl border bg-background/90 px-4 py-3 shadow-soft focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground/70"
             />
             <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <Search className="w-5 h-5" />
             </div>
           </div>
         </div>

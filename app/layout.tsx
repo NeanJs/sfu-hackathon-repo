@@ -6,6 +6,7 @@ import ButtonBar from './components/button-bar/ButtonBar'
 import { SearchOverlayProvider } from './components/search-overlay/SearchOverlayProvider'
 import SearchOverlay from './components/search-overlay/SearchOverlay'
 import { TabBar } from './components/tabbar'
+import { Header } from './components/header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +25,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <SearchOverlayProvider>
           <ButtonBarProvider>
-            {children}
+            <Header />
+            <div className="pb-safe-area">
+              {children}
+            </div>
             <TabBar />
             <ButtonBar />
             <SearchOverlay />

@@ -2,8 +2,8 @@
 
 import { Suspense, useCallback, useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { Home as HomeIcon, BarChart3, FileText, Settings } from 'lucide-react'
 import CompanyDirectory from './components/company-directory/CompanyDirectory'
-import Tabs, { type Tab } from './components/tabs/Tabs'
 import { CardOverlay } from './components/card-overlay'
 import { CompanyDetail } from './components/company-detail'
 import type { Company } from './components/company-directory/data'
@@ -67,9 +67,6 @@ function HomeContent() {
     console.log('Selected companies:', selectedCompanies)
   }
 
-  const handleTabChange = (tabId: string) => {
-    console.log('Active tab changed to:', tabId)
-  }
 
   const handleCompanyOpen = (company: Company) => {
     console.log('handleCompanyOpen called with:', company)
@@ -77,99 +74,59 @@ function HomeContent() {
     openOverlayForName(company.name)
   }
 
-  const tabs: Tab[] = [
-    {
-      id: 'companies',
-      label: 'Companies',
-      content: (
-        <div className="card-elevated p-3 sm:p-4">
-          <CompanyDirectory selectable={false} onCompanyOpen={handleCompanyOpen} />
-        </div>
-      )
-    },
-    {
-      id: 'analytics',
-      label: 'Analytics',
-      content: (
-        <div className="card-elevated p-3 sm:p-4">
-          <div className="text-center py-12">
-            <h3 className="text-2xl font-bold mb-4">Analytics Dashboard</h3>
-            <p className="text-muted-foreground">Coming soon - detailed analytics and insights</p>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'reports',
-      label: 'Reports',
-      content: (
-        <div className="card-elevated p-3 sm:p-4">
-          <div className="text-center py-12">
-            <h3 className="text-2xl font-bold mb-4">Reports</h3>
-            <p className="text-muted-foreground">Generate and download transparency reports</p>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'settings',
-      label: 'Settings',
-      content: (
-        <div className="card-elevated p-3 sm:p-4">
-          <div className="text-center py-12">
-            <h3 className="text-2xl font-bold mb-4">Settings</h3>
-            <p className="text-muted-foreground">Configure your preferences and notifications</p>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'help',
-      label: 'Help & Support',
-      content: (
-        <div className="card-elevated p-3 sm:p-4">
-          <div className="text-center py-12">
-            <h3 className="text-2xl font-bold mb-4">Help & Support</h3>
-            <p className="text-muted-foreground">Get help and contact our support team</p>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'about',
-      label: 'About',
-      content: (
-        <div className="card-elevated p-3 sm:p-4">
-          <div className="text-center py-12">
-            <h3 className="text-2xl font-bold mb-4">About Leadger</h3>
-            <p className="text-muted-foreground">Learn more about our mission and values</p>
-          </div>
-        </div>
-      )
-    }
-  ]
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
-      <div className="container mx-auto px-4 py-8 pb-safe-area">
-        <div className="text-center mb-12 animate-slide-up">
-          <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
-            <span className="text-sm font-medium text-primary">Political Transparency</span>
+      <div className="app-container">
+        <div className="app-section animate-slide-up">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex-1">
+            </div>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="gradient-text">Leadger</span>
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Disclosing companies' actions and influence towards politics
-          </p>
+
+          <div className="app-grid">
+            <div className="card p-4 text-center hover:shadow-medium transition-all duration-200">
+              <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-primary/10 flex items-center justify-center">
+                <HomeIcon className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="text-sm font-semibold mb-1">Companies</h3>
+              <p className="text-xs text-muted-foreground">Browse directory</p>
+            </div>
+            <div className="card p-4 text-center hover:shadow-medium transition-all duration-200">
+              <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-accent/10 flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 text-accent" />
+              </div>
+              <h3 className="text-sm font-semibold mb-1">Analytics</h3>
+              <p className="text-xs text-muted-foreground">View insights</p>
+            </div>
+            <div className="card p-4 text-center hover:shadow-medium transition-all duration-200">
+              <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-secondary/10 flex items-center justify-center">
+                <FileText className="w-4 h-4 text-secondary" />
+              </div>
+              <h3 className="text-sm font-semibold mb-1">Reports</h3>
+              <p className="text-xs text-muted-foreground">Generate docs</p>
+            </div>
+            <div className="card p-4 text-center hover:shadow-medium transition-all duration-200">
+              <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-muted/20 flex items-center justify-center">
+                <Settings className="w-4 h-4 text-muted-foreground" />
+              </div>
+              <h3 className="text-sm font-semibold mb-1">Settings</h3>
+              <p className="text-xs text-muted-foreground">Configure</p>
+            </div>
+          </div>
         </div>
 
-        <Tabs 
-          tabs={tabs} 
-          defaultActiveTab="companies"
-          onTabChange={handleTabChange}
-          className="max-w-5xl mx-auto"
-        />
+        <div>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Company Directory</h2>
+              <div className="text-sm text-muted-foreground">Browse and explore</div>
+            </div>
+            <div className="card-elevated p-4">
+              <CompanyDirectory selectable={false} onCompanyOpen={handleCompanyOpen} />
+            </div>
+          </div>
+        </div>
       </div>
 
       <CardOverlay
@@ -199,22 +156,29 @@ export default function Home() {
   return (
     <Suspense fallback={
       <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
-        <div className="container mx-auto px-4 py-8 pb-safe-area">
-          <div className="text-center mb-12 animate-slide-up">
-            <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
-              <span className="text-sm font-medium text-primary">Political Transparency</span>
+        <div className="app-container">
+          <div className="app-section animate-slide-up">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex-1">
+              </div>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="gradient-text">Leadger</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Disclosing companies' actions and influence towards politics
-            </p>
+
+            <div className="app-grid">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="card p-4 text-center">
+                  <div className="animate-pulse">
+                    <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-muted"></div>
+                    <div className="h-4 bg-muted rounded mb-1"></div>
+                    <div className="h-3 bg-muted rounded w-3/4 mx-auto"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="max-w-5xl mx-auto">
-            <div className="card-elevated p-8 text-center">
+          <div>
+            <div className="card-elevated p-4">
               <div className="animate-pulse">
-                <div className="h-8 bg-muted rounded mb-4"></div>
+                <div className="h-6 bg-muted rounded mb-4"></div>
                 <div className="h-4 bg-muted rounded mb-2"></div>
                 <div className="h-4 bg-muted rounded mb-2"></div>
                 <div className="h-4 bg-muted rounded"></div>
