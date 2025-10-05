@@ -7,6 +7,7 @@ import type { Company } from '../components/company-directory/data'
 import { useButtonBarActions } from '../components/button-bar/ButtonBarProvider'
 import { UserForm } from '../components/userform'
 import { InfoCard } from '../components/infocard'
+import { BarChart } from '../components/barchart'
 
 export default function DemoPage() {
   const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([])
@@ -287,7 +288,117 @@ export default function DemoPage() {
       )
     },
     {
-      id: 'button-bar-demo',
+      id: 'barchart-demo',
+      label: 'BarChart',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">BarChart Component</h2>
+            <p className="text-muted-foreground">Mobile-first responsive SVG bar chart with sorting and data labels</p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="card-elevated p-3 sm:p-4">
+              <BarChart
+                title="Revenue by Company"
+                data={[
+                  { category: 'TechCorp', value: 2500000 },
+                  { category: 'Alpha Industries', value: 1800000 },
+                  { category: 'Beta Solutions', value: 1200000 },
+                  { category: 'Gamma Enterprises', value: 900000 },
+                  { category: 'Delta Corp', value: 600000 },
+                ]}
+                xTitle="Companies"
+                yTitle="Revenue"
+                unit="$"
+                sort="value-desc"
+                barColor="#2563eb"
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <BarChart
+                title="User Engagement"
+                data={[
+                  { category: 'Mobile App', value: 38000 },
+                  { category: 'Web Platform', value: 32000 },
+                  { category: 'Desktop Software', value: 28000 },
+                  { category: 'API Usage', value: 15000 },
+                  { category: 'Third-party Integration', value: 8000 },
+                ]}
+                xTitle="Platforms"
+                yTitle="Active Users"
+                unit="users"
+                sort="value-desc"
+                barColor="#059669"
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <BarChart
+                title="Monthly Sales (Log Scale)"
+                data={[
+                  { category: 'Apr', value: 1 },
+                  { category: 'Feb', value: 500 },
+                  { category: 'Jan', value: 100 },
+                  { category: 'Jun', value: 2000 },
+                  { category: 'Mar', value: 2000 },
+                  { category: 'May', value: 2000 },
+                ]}
+                xTitle="Month"
+                yTitle="Sales"
+                unit="units"
+                logScale={true}
+                sort="none"
+                barColor="#dc2626"
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <BarChart
+                title="Customer Satisfaction"
+                data={[
+                  { category: 'Very Satisfied', value: 80 },
+                  { category: 'Satisfied', value: 12 },
+                  { category: 'Neutral', value: 2 },
+                  { category: 'Dissatisfied', value: 1 },
+                  { category: 'Very Dissatisfied', value: 0 },
+                ]}
+                xTitle="Satisfaction Level"
+                yTitle="Percentage"
+                unit="%"
+                sort="value-desc"
+                barColor="#7c3aed"
+                maxValue={100}
+              />
+            </div>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <h3 className="text-lg font-semibold mb-4">Features</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Zero baseline (unless log scale)</li>
+                <li>• Meaningful sorting (by value or alphabetically)</li>
+                <li>• Clear axis titles with units</li>
+                <li>• Wrapped/tilted labels for long text</li>
+                <li>• Consistent bar width and gaps</li>
+                <li>• Data labels for exact values</li>
+              </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Mobile-first responsive design</li>
+                <li>• SVG-based rendering</li>
+                <li>• Optional log scale</li>
+                <li>• Customizable colors and styling</li>
+                <li>• Grid lines and baseline</li>
+                <li>• Self-contained component</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
       label: 'Button Bar Demo',
       content: (
         <div className="space-y-6">
