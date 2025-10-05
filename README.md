@@ -24,8 +24,4 @@ firebase
 gemini
 nextjs
 tailwind
-Try it out
- sfu-hackathon-repo.vercel.app
- docs.google.com
- GitHub Repo
- www.leadger.tech
+Try it out - www.leadger.tech
