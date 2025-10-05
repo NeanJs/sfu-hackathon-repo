@@ -18,6 +18,11 @@ export default function TabBar() {
   const pathname = usePathname()
   const { open } = useSearchOverlay()
 
+  // Hide tab bar on onboarding page
+  if (pathname === '/onboarding') {
+    return null
+  }
+
   const tabs = useMemo<TabItem[]>(() => [
     {
       id: 'home',

@@ -1,12 +1,42 @@
 'use client'
 
-// Functionality: Firebase-ready API stubs for fetching form definition and submitting responses
+// Functionality: API adapter for UserForm (supports onboarding via /api/onboarding)
 
 import type { FormDefinition, FormResponse } from './types'
 
 export async function fetchFormDefinition(formId: string): Promise<FormDefinition> {
-  // Placeholder for Firebase integration
-  // Replace with Firestore call e.g., getDoc(doc(db, 'forms', formId))
+  if (formId === 'onboarding') {
+    const res = await fetch('/api/onboarding', { cache: 'no-store' })
+    if (!res.ok) throw new Error('Failed to load onboarding survey')
+    const questions = await res.json() as Array<{
+      key: string
+      question: string
+      options: Array<{ value: string; label: string; pmv?: string }>
+    }>
+
+    const mappedQuestions = questions.map((q) => ({
+      id: q.key,
+      type: 'radio' as const,
+      title: q.question,
+      required: true,
+      options: q.options.map((o) => ({ id: o.value, label: o.label, value: o.value }))
+    }))
+
+    const steps = questions.map((q, idx) => ({
+      id: `step-${idx + 1}`,
+      title: `Question ${idx + 1}`,
+      questionIds: [q.key]
+    }))
+
+    return {
+      id: formId,
+      title: 'Welcome Survey',
+      description: 'Answer a few quick questions to personalize your experience',
+      steps,
+      questions: mappedQuestions
+    }
+  }
+
   await new Promise((r) => setTimeout(r, 200))
   return {
     id: formId,
@@ -49,8 +79,15 @@ export async function fetchFormDefinition(formId: string): Promise<FormDefinitio
 }
 
 export async function submitFormResponse(formId: string, response: FormResponse) {
-  // Placeholder for Firebase integration
-  // Replace with Firestore write e.g., addDoc(collection(db, 'responses', formId, 'entries'), response)
+  if (formId === 'onboarding') {
+    const res = await fetch('/api/onboarding', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(response)
+    })
+    if (!res.ok) throw new Error('Failed to submit onboarding survey')
+    return await res.json()
+  }
   await new Promise((r) => setTimeout(r, 300))
   return { ok: true }
 }

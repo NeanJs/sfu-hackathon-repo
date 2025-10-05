@@ -50,7 +50,7 @@ export default function CardOverlay({
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
-      <div ref={containerRef} className={`relative w-full sm:max-w-2xl md:max-w-3xl mx-auto flex flex-col bg-background border border-border rounded-none sm:rounded-2xl shadow-hard max-h-[100dvh] sm:max-h-[90vh] animate-scale-in overflow-hidden ${className}`}>
+      <div ref={containerRef} className={`relative w-full mx-auto flex flex-col bg-background border border-border rounded-none sm:rounded-2xl shadow-hard max-h-[100dvh] sm:max-h-[90vh] animate-scale-in overflow-hidden ${className}`}>
         <header className="sticky top-0 z-10 bg-background border-b border-border flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-3 rounded-t-none sm:rounded-t-2xl">
           <div className="min-w-0 flex-1">
             {title && (
