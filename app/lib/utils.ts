@@ -1,5 +1,5 @@
 const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
-console.log("Using Gemini API Key:", apiKey ? `...${apiKey.slice(-4)}` : "Not found"); // Log the key
+
 const API_MODEL = "gemini-2.5-flash-preview-05-20";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${apiKey}`;
 
@@ -56,10 +56,10 @@ export async function callGeminiApi(
       let textResponse = data.candidates[0].content.parts[0].text;
 
       // Remove markdown code block delimiters if present
-      if (textResponse.startsWith('```json')) {
+      if (textResponse.startsWith("```json")) {
         textResponse = textResponse.substring(7);
       }
-      if (textResponse.endsWith('```')) {
+      if (textResponse.endsWith("```")) {
         textResponse = textResponse.substring(0, textResponse.length - 3);
       }
       return textResponse.trim();

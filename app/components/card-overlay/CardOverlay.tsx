@@ -19,7 +19,7 @@ export default function CardOverlay({
 }: CardOverlayProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   
-  console.log('CardOverlay render:', { isOpen, title, children: !!children })
+  
 
   useEffect(() => {
     if (isOpen) {

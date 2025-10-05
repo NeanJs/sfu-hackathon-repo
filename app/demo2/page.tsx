@@ -1,0 +1,995 @@
+'use client'
+
+import { useMemo, useState } from 'react'
+import CompanyDirectory from '../components/company-directory/CompanyDirectory'
+import Tabs, { type Tab } from '../components/tabs/Tabs'
+import type { Company } from '../components/company-directory/data'
+import { useButtonBarActions } from '../components/button-bar/ButtonBarProvider'
+import { UserForm } from '../components/userform'
+import { InfoCard } from '../components/infocard'
+import { BarChart } from '../components/barchart'
+import { Histogram } from '../components/histogram'
+import { CardOverlay } from '../components/card-overlay'
+import { Skeleton, SkeletonText, SkeletonCard, SkeletonAvatar, SkeletonButton } from '../components/skeleton'
+
+export default function DemoPage() {
+  const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([])
+  const [singleSelectedCompanies, setSingleSelectedCompanies] = useState<Company[]>([])
+  const [activeTab, setActiveTab] = useState('company-directory-basic')
+  const [isCardOverlayOpen, setIsCardOverlayOpen] = useState(false)
+
+  const handleSelectionChange = (companies: Company[]) => {
+    setSelectedCompanies(companies)
+    
+  }
+
+  const handleSingleSelectionChange = (companies: Company[]) => {
+    setSingleSelectedCompanies(companies)
+    
+  }
+
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId)
+    
+  }
+
+  const buttonBarActions = useMemo(() => {
+    if (activeTab === 'company-directory-selectable') {
+      return [
+        {
+          id: 'clear-selection',
+          label: 'Clear Selection',
+          variant: 'secondary' as const,
+          onClick: () => setSelectedCompanies([]),
+          disabled: selectedCompanies.length === 0
+        },
+        {
+          id: 'export-selected',
+          label: `Export (${selectedCompanies.length})`,
+          onClick: () => console.log('Exporting:', selectedCompanies),
+          disabled: selectedCompanies.length === 0
+        }
+      ]
+    }
+    
+    if (activeTab === 'company-directory-single-select') {
+      return [
+        {
+          id: 'clear-single-selection',
+          label: 'Clear Selection',
+          variant: 'secondary' as const,
+          onClick: () => setSingleSelectedCompanies([]),
+          disabled: singleSelectedCompanies.length === 0
+        },
+        {
+          id: 'export-single-selected',
+          label: `Export (${singleSelectedCompanies.length})`,
+          onClick: () => console.log('Exporting:', singleSelectedCompanies),
+          disabled: singleSelectedCompanies.length === 0
+        }
+      ]
+    }
+    
+    if (activeTab === 'button-bar-demo') {
+      return [
+        {
+          id: 'action-1',
+          label: 'Action 1',
+          variant: 'secondary' as const,
+          onClick: () => alert('Action 1 clicked!')
+        },
+        {
+          id: 'action-2',
+          label: 'Action 2',
+          onClick: () => alert('Action 2 clicked!')
+        },
+        {
+          id: 'action-3',
+          label: 'Action 3',
+          onClick: () => alert('Action 3 clicked!')
+        }
+      ]
+    }
+
+    return null
+  }, [activeTab, selectedCompanies, singleSelectedCompanies])
+
+  useButtonBarActions(buttonBarActions)
+
+  const tabs: Tab[] = [
+    {
+      id: 'infocard-demo',
+      label: 'InfoCard',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">InfoCard</h2>
+            <p className="text-muted-foreground">Mobile-first, responsive info card with media and children</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="card-elevated p-0">
+              <InfoCard
+                data={{
+                  id: 'hard-coded',
+                  title: 'Hard-coded InfoCard',
+                  body: 'Uses directly provided data and supports embedding other components as children.',
+                  media: [
+                    {
+                      kind: 'image',
+                      src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+                      alt: 'Mountains',
+                      aspectRatio: '16/9'
+                    }
+                  ]
+                }}
+              >
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <button className="btn-primary">Primary Action</button>
+                  <button className="btn-secondary">Secondary</button>
+                </div>
+              </InfoCard>
+            </div>
+            <div className="card-elevated p-0">
+              <InfoCard id="demo-infocard" />
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'userform-demo',
+      label: 'UserForm',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">UserForm</h2>
+            <p className="text-muted-foreground">Mobile-first, multi-step form with bottom button bar</p>
+          </div>
+          <div className="card-elevated p-3 sm:p-4">
+            <UserForm formId="demo-user-form" />
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'company-directory-basic',
+      label: 'Company Directory',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Company Directory</h2>
+            <p className="text-muted-foreground">Basic company directory with search and filtering</p>
+          </div>
+          <div className="card-elevated p-3 sm:p-4">
+            <CompanyDirectory selectable={false} />
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'company-directory-selectable',
+      label: 'Selectable Directory',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Selectable Company Directory</h2>
+            <p className="text-muted-foreground">Company directory with selection capabilities</p>
+          </div>
+          <div className="card-elevated p-3 sm:p-4">
+            <CompanyDirectory selectable={true} multiselect={true} onSelectionChange={handleSelectionChange} />
+          </div>
+          {selectedCompanies.length > 0 && (
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-3">Selected Companies ({selectedCompanies.length})</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {selectedCompanies.map((company) => (
+                  <div key={company.id} className="flex items-center gap-2 p-2 bg-secondary/20 rounded-lg">
+                    <span className="text-sm font-medium">{company.name}</span>
+                    <span className="text-xs text-muted-foreground">({company.category})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )
+    },
+    {
+      id: 'company-directory-single-select',
+      label: 'Single Select Directory',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Single Select Company Directory</h2>
+            <p className="text-muted-foreground">Company directory with single selection mode</p>
+          </div>
+          <div className="card-elevated p-3 sm:p-4">
+            <CompanyDirectory selectable={true} multiselect={false} onSelectionChange={handleSingleSelectionChange} />
+          </div>
+          {singleSelectedCompanies.length > 0 && (
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-3">Selected Company ({singleSelectedCompanies.length})</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {singleSelectedCompanies.map((company) => (
+                  <div key={company.id} className="flex items-center gap-2 p-2 bg-secondary/20 rounded-lg">
+                    <span className="text-sm font-medium">{company.name}</span>
+                    <span className="text-xs text-muted-foreground">({company.category})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )
+    },
+    {
+      id: 'tabs-component',
+      label: 'Tabs Component',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Tabs Component</h2>
+            <p className="text-muted-foreground">Scrollable tabs with responsive design</p>
+          </div>
+          <div className="card-elevated p-3 sm:p-4">
+            <Tabs 
+              tabs={[
+                {
+                  id: 'tab1',
+                  label: 'First Tab',
+                  content: (
+                    <div className="p-4 bg-secondary/20 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-2">First Tab Content</h3>
+                      <p className="text-muted-foreground">This is the content of the first tab.</p>
+                    </div>
+                  )
+                },
+                {
+                  id: 'tab2',
+                  label: 'Second Tab',
+                  content: (
+                    <div className="p-4 bg-secondary/20 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-2">Second Tab Content</h3>
+                      <p className="text-muted-foreground">This is the content of the second tab.</p>
+                    </div>
+                  )
+                },
+                {
+                  id: 'tab3',
+                  label: 'Third Tab',
+                  content: (
+                    <div className="p-4 bg-secondary/20 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-2">Third Tab Content</h3>
+                      <p className="text-muted-foreground">This is the content of the third tab.</p>
+                    </div>
+                  )
+                },
+                {
+                  id: 'tab4',
+                  label: 'Fourth Tab',
+                  content: (
+                    <div className="p-4 bg-secondary/20 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-2">Fourth Tab Content</h3>
+                      <p className="text-muted-foreground">This is the content of the fourth tab.</p>
+                    </div>
+                  )
+                },
+                {
+                  id: 'tab5',
+                  label: 'Fifth Tab',
+                  content: (
+                    <div className="p-4 bg-secondary/20 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-2">Fifth Tab Content</h3>
+                      <p className="text-muted-foreground">This is the content of the fifth tab.</p>
+                    </div>
+                  )
+                }
+              ]}
+              defaultActiveTab="tab1"
+            />
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'barchart-demo',
+      label: 'BarChart',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">BarChart Component</h2>
+            <p className="text-muted-foreground">Mobile-first responsive SVG bar chart with sorting and data labels</p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="card-elevated p-3 sm:p-4">
+              <BarChart
+                title="Revenue by Company"
+                data={[
+                  { category: 'TechCorp', value: 2500000 },
+                  { category: 'Alpha Industries', value: 1800000 },
+                  { category: 'Beta Solutions', value: 1200000 },
+                  { category: 'Gamma Enterprises', value: 900000 },
+                  { category: 'Delta Corp', value: 600000 },
+                ]}
+                xTitle="Companies"
+                yTitle="Revenue"
+                unit="$"
+                sort="value-desc"
+                barColor="#2563eb"
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <BarChart
+                title="User Engagement"
+                data={[
+                  { category: 'Mobile App', value: 38000 },
+                  { category: 'Web Platform', value: 32000 },
+                  { category: 'Desktop Software', value: 28000 },
+                  { category: 'API Usage', value: 15000 },
+                  { category: 'Third-party Integration', value: 8000 },
+                ]}
+                xTitle="Platforms"
+                yTitle="Active Users"
+                unit="users"
+                sort="value-desc"
+                barColor="#059669"
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <BarChart
+                title="Monthly Sales (Log Scale)"
+                data={[
+                  { category: 'Apr', value: 1 },
+                  { category: 'Feb', value: 500 },
+                  { category: 'Jan', value: 100 },
+                  { category: 'Jun', value: 2000 },
+                  { category: 'Mar', value: 2000 },
+                  { category: 'May', value: 2000 },
+                ]}
+                xTitle="Month"
+                yTitle="Sales"
+                unit="units"
+                logScale={true}
+                sort="none"
+                barColor="#dc2626"
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <BarChart
+                title="Customer Satisfaction"
+                data={[
+                  { category: 'Very Satisfied', value: 80 },
+                  { category: 'Satisfied', value: 12 },
+                  { category: 'Neutral', value: 2 },
+                  { category: 'Dissatisfied', value: 1 },
+                  { category: 'Very Dissatisfied', value: 0 },
+                ]}
+                xTitle="Satisfaction Level"
+                yTitle="Percentage"
+                unit="%"
+                sort="value-desc"
+                barColor="#7c3aed"
+                maxValue={100}
+              />
+            </div>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <h3 className="text-lg font-semibold mb-4">Features</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Zero baseline (unless log scale)</li>
+                <li>• Meaningful sorting (by value or alphabetically)</li>
+                <li>• Clear axis titles with units</li>
+                <li>• Wrapped/tilted labels for long text</li>
+                <li>• Consistent bar width and gaps</li>
+                <li>• Data labels for exact values</li>
+              </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Mobile-first responsive design</li>
+                <li>• SVG-based rendering</li>
+                <li>• Optional log scale</li>
+                <li>• Customizable colors and styling</li>
+                <li>• Grid lines and baseline</li>
+                <li>• Self-contained component</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'histogram-demo',
+      label: 'Histogram',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Histogram Component</h2>
+            <p className="text-muted-foreground">Mobile-first responsive histogram with explicit bins and count/density scaling</p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="card-elevated p-3 sm:p-4">
+              <Histogram
+                title="Sales Distribution (Count)"
+                series={[
+                  { 
+                    id: 'Q1 Sales', 
+                    values: [1.2, 1.5, 1.8, 2.1, 2.3, 2.7, 3.0, 3.2, 3.5, 3.8, 4.1, 4.3, 4.7, 5.0, 5.2],
+                    color: '#2563eb'
+                  },
+                  { 
+                    id: 'Q2 Sales', 
+                    values: [1.0, 1.3, 1.6, 1.9, 2.2, 2.5, 2.8, 3.1, 3.4, 3.7, 4.0, 4.3, 4.6, 4.9, 5.2],
+                    color: '#10b981'
+                  }
+                ]}
+                bins={{ binWidth: 1.5, domain: [0.5, 5.5] }}
+                yScale="count"
+                xTitle="Sales Amount"
+                yTitle="Frequency"
+                unit="$M"
+                height={500}
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <Histogram
+                title="Response Times (Density)"
+                series={[
+                  { 
+                    id: 'API Calls', 
+                    values: [50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450],
+                    color: '#f59e0b'
+                  }
+                ]}
+                bins={{ binWidth: 100, domain: [25, 475] }}
+                yScale="density"
+                xTitle="Response Time"
+                yTitle="Density"
+                unit="ms"
+                height={500}
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <Histogram
+                title="Customer Satisfaction Scores"
+                series={[
+                  { 
+                    id: 'Mobile Users', 
+                    values: [3.2, 3.5, 3.8, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0],
+                    color: '#8b5cf6'
+                  },
+                  { 
+                    id: 'Desktop Users', 
+                    values: [3.0, 3.3, 3.6, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8],
+                    color: '#ef4444'
+                  }
+                ]}
+                bins={{ binEdges: [2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5] }}
+                yScale="count"
+                xTitle="Satisfaction Score"
+                yTitle="Count"
+                unit="stars"
+                height={500}
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <Histogram
+                title="Revenue Distribution (Density)"
+                series={[
+                  { 
+                    id: 'Enterprise', 
+                    values: [100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800],
+                    color: '#06b6d4'
+                  },
+                  { 
+                    id: 'SMB', 
+                    values: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+                    color: '#84cc16'
+                  }
+                ]}
+                bins={{ binWidth: 200, domain: [0, 900] }}
+                yScale="density"
+                xTitle="Revenue"
+                yTitle="Density"
+                unit="$K"
+                height={500}
+              />
+            </div>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <h3 className="text-lg font-semibold mb-4">Features</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Explicit bin width or bin edges</li>
+                <li>• Shared bins across multiple series</li>
+                <li>• Count vs density scaling</li>
+                <li>• Stacked multi-series visualization</li>
+                <li>• Responsive SVG rendering</li>
+                <li>• Built-in legend and grid lines</li>
+              </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Mobile-first responsive design</li>
+                <li>• Customizable colors per series</li>
+                <li>• Axis labels with units</li>
+                <li>• Self-contained component</li>
+                <li>• Consistent binning for comparisons</li>
+                <li>• Density normalization support</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'button-bar-demo',
+      label: 'Button Bar Demo',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Button Bar Component</h2>
+            <p className="text-muted-foreground">Fixed bottom button bar with responsive design</p>
+          </div>
+          <div className="card-elevated p-3 sm:p-4">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold">Features</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Fixed bottom positioning with overlay</li>
+                <li>• Mobile-first responsive design</li>
+                <li>• Equal-width button distribution</li>
+                <li>• Primary and secondary button variants</li>
+                <li>• Disabled state support</li>
+                <li>• Auto-hide when no actions</li>
+                <li>• Safe area padding for mobile devices</li>
+              </ul>
+              <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                <p className="text-sm text-primary font-medium mb-2">Try the buttons below!</p>
+                <p className="text-sm text-muted-foreground">The button bar appears at the bottom of the screen with 3 example actions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'card-overlay-demo',
+      label: 'CardOverlay',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">CardOverlay Component</h2>
+            <p className="text-muted-foreground">Full-screen overlay container with sticky header and close button</p>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold">Features</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Full-screen overlay with backdrop blur</li>
+                <li>• Sticky header with close button</li>
+                <li>• Optional footer and header actions</li>
+                <li>• Mobile-first responsive design</li>
+                <li>• Keyboard navigation (Esc to close)</li>
+                <li>• Click backdrop to close</li>
+                <li>• Body scroll lock while open</li>
+                <li>• Self-contained component</li>
+              </ul>
+              
+              <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                <p className="text-sm text-primary font-medium mb-4">Try the CardOverlay!</p>
+                <button 
+                  onClick={() => setIsCardOverlayOpen(true)}
+                  className="btn-primary"
+                >
+                  Open CardOverlay Demo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'skeleton-demo',
+      label: 'Skeleton',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Skeleton Component</h2>
+            <p className="text-muted-foreground">Generic loading skeleton components with shimmer animation</p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-4">Text Skeletons</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Single line (md)</p>
+                  <SkeletonText size="md" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Multiple lines (3 lines)</p>
+                  <SkeletonText lines={3} size="md" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Different sizes</p>
+                  <div className="space-y-2">
+                    <SkeletonText size="xs" />
+                    <SkeletonText size="sm" />
+                    <SkeletonText size="lg" />
+                    <SkeletonText size="xl" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Custom width</p>
+                  <SkeletonText width="60%" />
+                  <SkeletonText width="40%" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-4">Avatar Skeletons</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Different sizes</p>
+                  <div className="flex items-center gap-4">
+                    <SkeletonAvatar size="xs" />
+                    <SkeletonAvatar size="sm" />
+                    <SkeletonAvatar size="md" />
+                    <SkeletonAvatar size="lg" />
+                    <SkeletonAvatar size="xl" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Circle variant</p>
+                  <div className="flex items-center gap-4">
+                    <Skeleton variant="circle" size="sm" />
+                    <Skeleton variant="circle" size="md" />
+                    <Skeleton variant="circle" size="lg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-4">Button Skeletons</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Different sizes</p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <SkeletonButton size="xs" />
+                    <SkeletonButton size="sm" />
+                    <SkeletonButton size="md" />
+                    <SkeletonButton size="lg" />
+                    <SkeletonButton size="xl" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Custom widths</p>
+                  <div className="space-y-2">
+                    <SkeletonButton width="120px" />
+                    <SkeletonButton width="80px" />
+                    <SkeletonButton width="200px" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-4">Card Skeletons</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Basic card</p>
+                  <SkeletonCard />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Card without avatar</p>
+                  <SkeletonCard showAvatar={false} />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Card without actions</p>
+                  <SkeletonCard showActions={false} />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <h3 className="text-lg font-semibold mb-4">Real-world Examples</h3>
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm text-muted-foreground mb-3">User profile loading</p>
+                <div className="card p-4">
+                  <div className="flex items-center space-x-4">
+                    <SkeletonAvatar size="lg" />
+                    <div className="flex-1 space-y-2">
+                      <SkeletonText size="lg" width="40%" />
+                      <SkeletonText size="sm" width="60%" />
+                      <SkeletonText size="sm" width="30%" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <p className="text-sm text-muted-foreground mb-3">Article list loading</p>
+                <div className="space-y-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="card p-4">
+                      <div className="flex space-x-3">
+                        <Skeleton variant="rect" width="80px" height="60px" />
+                        <div className="flex-1 space-y-2">
+                          <SkeletonText size="md" width="80%" />
+                          <SkeletonText lines={2} size="sm" />
+                          <div className="flex items-center space-x-2">
+                            <SkeletonAvatar size="xs" />
+                            <SkeletonText size="xs" width="100px" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <p className="text-sm text-muted-foreground mb-3">Form loading</p>
+                <div className="card p-4">
+                  <div className="space-y-4">
+                    <div>
+                      <SkeletonText size="sm" width="60px" />
+                      <Skeleton variant="rect" height="40px" className="mt-1" />
+                    </div>
+                    <div>
+                      <SkeletonText size="sm" width="80px" />
+                      <Skeleton variant="rect" height="40px" className="mt-1" />
+                    </div>
+                    <div>
+                      <SkeletonText size="sm" width="100px" />
+                      <Skeleton variant="rect" height="80px" className="mt-1" />
+                    </div>
+                    <div className="flex gap-2 pt-2">
+                      <SkeletonButton width="80px" />
+                      <SkeletonButton width="60px" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <h3 className="text-lg font-semibold mb-4">Features</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Multiple variants: text, avatar, button, card, circle, rect</li>
+                <li>• Size presets: xs, sm, md, lg, xl</li>
+                <li>• Custom width and height support</li>
+                <li>• Multi-line text skeletons</li>
+                <li>• Shimmer animation effect</li>
+                <li>• Composable components</li>
+              </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Mobile-first responsive design</li>
+                <li>• Consistent with design system</li>
+                <li>• Easy to customize and extend</li>
+                <li>• TypeScript support</li>
+                <li>• Accessibility friendly</li>
+                <li>• Self-contained components</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'component-features',
+      label: 'Component Features',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Component Features</h2>
+            <p className="text-muted-foreground">Overview of available component features and capabilities</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="card-elevated p-6">
+              <h3 className="text-xl font-semibold mb-3">Company Directory Features</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Search functionality with debounced input</li>
+                <li>• Category filtering</li>
+                <li>• Infinite scroll pagination</li>
+                <li>• Company logo display with fallback</li>
+                <li>• Selection mode (optional)</li>
+                <li>• Responsive grid layout</li>
+                <li>• Accessibility features</li>
+              </ul>
+            </div>
+            <div className="card-elevated p-6">
+              <h3 className="text-xl font-semibold mb-3">Tabs Component Features</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Horizontal scrolling tabs</li>
+                <li>• Scroll navigation buttons</li>
+                <li>• Responsive design</li>
+                <li>• Keyboard navigation</li>
+                <li>• Customizable styling</li>
+                <li>• Tab change callbacks</li>
+                <li>• Accessibility compliant</li>
+              </ul>
+            </div>
+            <div className="card-elevated p-6">
+              <h3 className="text-xl font-semibold mb-3">Button Bar Component Features</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Global state management</li>
+                <li>• Context-based communication</li>
+                <li>• Mobile-first responsive design</li>
+                <li>• Fixed bottom overlay positioning</li>
+                <li>• Equal-width button distribution</li>
+                <li>• Primary/secondary variants</li>
+                <li>• Disabled state support</li>
+                <li>• Auto-hide functionality</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  ]
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
+      <div className="container mx-auto px-4 py-8 pb-safe-area">
+        <div className="text-center mb-12 animate-slide-up">
+          <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
+            <span className="text-sm font-medium text-primary">Component Demo</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <span className="gradient-text">Component Showcase</span>
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Explore all available components and their features
+          </p>
+        </div>
+
+        <Tabs 
+          tabs={tabs} 
+          defaultActiveTab="company-directory-basic"
+          onTabChange={handleTabChange}
+          className="max-w-6xl mx-auto"
+        />
+      </div>
+
+      <CardOverlay
+        isOpen={isCardOverlayOpen}
+        onClose={() => setIsCardOverlayOpen(false)}
+        title="CardOverlay Demo"
+        headerRight={
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Sample</span>
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          </div>
+        }
+        footer={
+          <div className="flex justify-end gap-2">
+            <button 
+              onClick={() => setIsCardOverlayOpen(false)}
+              className="btn-secondary"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={() => setIsCardOverlayOpen(false)}
+              className="btn-primary"
+            >
+              Save Changes
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-2">Welcome to CardOverlay!</h2>
+            <p className="text-muted-foreground">This is a sample of the CardOverlay component with various content inside.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="card p-4">
+              <h3 className="text-lg font-semibold mb-2">Sample InfoCard</h3>
+              <InfoCard
+                data={{
+                  id: 'overlay-sample',
+                  title: 'Sample Card',
+                  body: 'This InfoCard is embedded inside the CardOverlay to demonstrate composability.',
+                  media: [
+                    {
+                      kind: 'image',
+                      src: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1200&auto=format&fit=crop',
+                      alt: 'Sample image',
+                      aspectRatio: '16/9'
+                    }
+                  ]
+                }}
+              />
+            </div>
+
+            <div className="card p-4">
+              <h3 className="text-lg font-semibold mb-2">Sample Chart</h3>
+              <BarChart
+                title="Sample Data"
+                data={[
+                  { category: 'A', value: 100 },
+                  { category: 'B', value: 200 },
+                  { category: 'C', value: 150 },
+                  { category: 'D', value: 300 },
+                ]}
+                xTitle="Categories"
+                yTitle="Values"
+                unit="units"
+                sort="value-desc"
+                barColor="#0ea5e9"
+              />
+            </div>
+          </div>
+
+          <div className="card p-4">
+            <h3 className="text-lg font-semibold mb-3">Sample Form</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Name</label>
+                <input 
+                  type="text" 
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+                  placeholder="Enter your name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input 
+                  type="email" 
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+                  placeholder="Enter your email"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Message</label>
+                <textarea 
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+                  rows={3}
+                  placeholder="Enter your message"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="card p-4">
+            <h3 className="text-lg font-semibold mb-3">Features Demonstrated</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Sticky header with title and close button</li>
+                <li>• Optional header actions (green dot indicator)</li>
+                <li>• Scrollable content area</li>
+                <li>• Optional footer with action buttons</li>
+                <li>• Backdrop blur and click-to-close</li>
+              </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Mobile-first responsive design</li>
+                <li>• Keyboard navigation (Esc to close)</li>
+                <li>• Body scroll lock while open</li>
+                <li>• Self-contained component</li>
+                <li>• Composable with other components</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </CardOverlay>
+    </main>
+  )
+}

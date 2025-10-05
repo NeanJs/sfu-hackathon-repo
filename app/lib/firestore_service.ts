@@ -71,9 +71,7 @@ export async function saveOnboardingQuestions(
   try {
     const docRef = getOnboardingQuestionsDocRef();
     await setDoc(docRef, { questions }, { merge: true });
-    console.log("Onboarding questions and criteria saved successfully.");
   } catch (error) {
-    console.error("Error saving onboarding questions:", error);
     throw error;
   }
 }
@@ -90,13 +88,12 @@ export async function loadOnboardingQuestions(): Promise<
     const docRef = getOnboardingQuestionsDocRef();
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("Onboarding questions and criteria loaded successfully.");
+      ("Onboarding questions and criteria loaded successfully.");
       return docSnap.data().questions as ProfileQuestion[];
     }
-    console.log("No onboarding questions and criteria found.");
+
     return null;
   } catch (error) {
-    console.error("Error loading onboarding questions:", error);
     throw error;
   }
 }
@@ -108,7 +105,6 @@ export async function initializeAuth(): Promise<void> {
   initializeFirebase();
   try {
     if (auth.currentUser) {
-      console.log("User already authenticated.");
       return;
     }
     if (__initial_auth_token) {
@@ -116,15 +112,10 @@ export async function initializeAuth(): Promise<void> {
     } else {
       await signInAnonymously(auth);
     }
-    console.log("Authentication initialized successfully.");
   } catch (error) {
-    console.error("Error during initial authentication:", error);
     try {
       await signInAnonymously(auth);
-      console.log("Fell back to anonymous authentication.");
-    } catch (anonError) {
-      console.error("Anonymous sign-in fallback failed:", anonError);
-    }
+    } catch (anonError) {}
   }
 }
 
@@ -136,9 +127,7 @@ export async function signInWithGoogle(): Promise<void> {
   const provider = new GoogleAuthProvider();
   try {
     await signInWithPopup(auth, provider);
-    console.log("Successfully signed in with Google.");
   } catch (error) {
-    console.error("Error signing in with Google:", error);
     throw error;
   }
 }
@@ -171,9 +160,7 @@ export async function saveUserPreferences(
   try {
     const docRef = getPreferencesDocRef();
     await setDoc(docRef, preferences, { merge: true });
-    console.log("User preferences saved successfully.");
   } catch (error) {
-    console.error("Error saving user preferences:", error);
     throw error;
   }
 }
@@ -188,13 +175,11 @@ export async function loadUserPreferences(): Promise<UserPreferences | null> {
     const docRef = getPreferencesDocRef();
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("User preferences loaded successfully.");
       return docSnap.data() as UserPreferences;
     }
-    console.log("No user preferences found for the current user.");
+
     return null;
   } catch (error) {
-    console.error("Error loading user preferences:", error);
     throw error;
   }
 }

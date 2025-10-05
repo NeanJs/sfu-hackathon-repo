@@ -21,7 +21,10 @@ const aiDiscoveryPrompt = {
             company_name: { type: "STRING" },
             category: { type: "STRING" },
             summary_violation: { type: "STRING" },
-            logo_url: { type: "STRING", description: "URL of the company's logo" }, // New field
+            logo_url: {
+              type: "STRING",
+              description: "URL of the company's logo",
+            }, // New field
           },
         },
         maxItems: 20, // Increased to 20 companies
@@ -99,11 +102,11 @@ export async function callCompanyDiscoveryAI(
   preferencePrompt?: string
 ): Promise<CompanyDiscoveryList> {
   try {
-    console.log("Calling Gemini API for company discovery...");
-    const userInput = `Generate a list of the 20 most high-risk companies based on recent anti-UNSDG activities. Apply extra scrutiny to companies whose violations align with the user's core political and moral values: ${preferencePrompt || "general market trends"
-      }. For each company, also provide its primary industry/sector category and a direct link to its official logo image file (e.g., .png, .svg, .jpg) that is directly embeddable in an HTML <img> tag. If a direct image link is not found, provide a placeholder or a link to a page where the logo is prominently displayed. IMPORTANT: Ensure each company name is distinct and not combined with other company names (e.g., 'Uber' not 'Uber, DoorDash'). The output MUST be a JSON string matching the following schema: ${JSON.stringify(
-        aiDiscoveryPrompt.output_schema
-      )}`;
+    const userInput = `Generate a list of the 20 most high-risk companies based on recent anti-UNSDG activities. Apply extra scrutiny to companies whose violations align with the user's core political and moral values: ${
+      preferencePrompt || "general market trends"
+    }. For each company, also provide its primary industry/sector category and a direct link to its official logo image file (e.g., .png, .svg, .jpg) that is directly embeddable in an HTML <img> tag. If a direct image link is not found, provide a placeholder or a link to a page where the logo is prominently displayed. IMPORTANT: Ensure each company name is distinct and not combined with other company names (e.g., 'Uber' not 'Uber, DoorDash'). The output MUST be a JSON string matching the following schema: ${JSON.stringify(
+      aiDiscoveryPrompt.output_schema
+    )}`;
 
     const response = await callGeminiApi(
       userInput,
@@ -111,11 +114,9 @@ export async function callCompanyDiscoveryAI(
       groundingTool,
       undefined // Removed responseSchema here
     );
-    console.log("Gemini API response received:", response);
 
     return JSON.parse(response) as CompanyDiscoveryList;
   } catch (error) {
-    console.error("Error in callCompanyDiscoveryAI:", error);
     throw error;
   }
 }
@@ -136,7 +137,6 @@ export async function callDueDiligenceAI(
     );
     return JSON.parse(response) as ScoreData;
   } catch (error) {
-    console.error(`Error in callDueDiligenceAI for ${companyName}:`, error);
     throw error;
   }
 }
@@ -159,10 +159,6 @@ export async function callActivismAI(
     );
     return JSON.parse(response) as ActivismPlan;
   } catch (error) {
-    console.error(
-      `Error in callActivismAI for ${scoreData.company_name}:`,
-      error
-    );
     throw error;
   }
 }
