@@ -16,6 +16,8 @@ export interface ProfileQuestion {
 export interface DiscoveryCompany {
   company_name: string;
   summary_violation: string; // 1-sentence summary of anti-SDG activity.
+  logo_url?: string; // New field for company logo URL
+  category?: string; // New field for company category
 }
 
 export interface CompanyDiscoveryList {
@@ -60,3 +62,15 @@ export interface FullAnalysisReport {
   ethical_reinvestment_idea: string; 
   pipeline_control_status: string; 
 }
+
+// Represents a company being analyzed.
+export interface Company {
+  name: string;
+  ticker_symbol?: string;
+  industry: string;
+  logo_url?: string; // New field for company logo URL
+  category?: string; // New field for company category
+}
+
+// The structured output from the due diligence AI call.
+// ...existing code...

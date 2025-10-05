@@ -1,13 +1,14 @@
-import { callGeminiApi } from './utils';
-import { CompanyDiscoveryList, ScoreData, ActivismPlan } from './types';
+import { callGeminiApi } from "./utils";
+import { CompanyDiscoveryList, ScoreData, ActivismPlan } from "./types";
 
-const groundingTool = [{ "google_search": {} }];
+const groundingTool = [{ google_search: {} }];
 
 // --- PROMPT SCHEMAS ---
 
 const aiDiscoveryPrompt = {
   role: "You are an ethical data curator...",
-  system_instruction: "Output must be a single, valid JSON object. The output should be a JSON string, not a JSON object directly.",
+  system_instruction:
+    "Output must be a single, valid JSON object. The output should be a JSON string, not a JSON object directly.",
   output_schema: {
     type: "OBJECT",
     properties: {
@@ -19,9 +20,11 @@ const aiDiscoveryPrompt = {
           properties: {
             company_name: { type: "STRING" },
             summary_violation: { type: "STRING" },
+            logo_url: { type: "STRING", description: "URL of the company's logo" }, // New field
+            category: { type: "STRING", description: "Industry or sector category of the company" }, // New field
           },
         },
-        maxItems: 5,
+        maxItems: 20, // Increased to 20 companies
       },
     },
   },
@@ -29,7 +32,8 @@ const aiDiscoveryPrompt = {
 
 const aiDueDiligencePrompt = {
   role: "You are a professional corporate due diligence analyst...",
-  system_instruction: "Output must be a single, valid JSON object. The output should be a JSON string, not a JSON object directly.",
+  system_instruction:
+    "Output must be a single, valid JSON object. The output should be a JSON string, not a JSON object directly.",
   output_schema: {
     type: "OBJECT",
     properties: {
@@ -37,6 +41,11 @@ const aiDueDiligencePrompt = {
       transparency_score: { type: "INTEGER" },
       primary_sdg_violation: { type: "STRING" },
       risk_summary: { type: "STRING" },
+      logo_url: { type: "STRING", description: "URL of the company's logo" }, // New field
+      category: {
+        type: "STRING",
+        description: "Industry or sector category of the company",
+      }, // New field
       detailed_violations: {
         type: "ARRAY",
         items: {
@@ -66,7 +75,14 @@ const aiActivismPrompt = {
         items: {
           type: "OBJECT",
           properties: {
-            category: { type: "STRING", enum: ["Economic Pressure", "Political Advocacy", "Social/Media Campaign"] },
+            category: {
+              type: "STRING",
+              enum: [
+                "Economic Pressure",
+                "Political Advocacy",
+                "Social/Media Campaign",
+              ],
+            },
             label: { type: "STRING" },
             description: { type: "STRING" },
           },
@@ -79,11 +95,17 @@ const aiActivismPrompt = {
 
 // --- API FUNCTIONS ---
 
-export async function callCompanyDiscoveryAI(preferencePrompt?: string): Promise<CompanyDiscoveryList> {
+export async function callCompanyDiscoveryAI(
+  preferencePrompt?: string
+): Promise<CompanyDiscoveryList> {
   try {
     console.log("Calling Gemini API for company discovery...");
-    const userInput = `Generate a list of the 10 most high-risk companies based on recent anti-UNSDG activities. Apply extra scrutiny to companies whose violations align with the user's core political and moral values: ${preferencePrompt || 'general market trends'}. The output MUST be a JSON string matching the following schema: ${JSON.stringify(aiDiscoveryPrompt.output_schema)}`;
-    
+    const userInput = `Generate a list of the 20 most high-risk companies based on recent anti-UNSDG activities. Apply extra scrutiny to companies whose violations align with the user's core political and moral values: ${
+      preferencePrompt || "general market trends"
+    }. For each company, also provide its primary industry/sector category and a direct link to its official logo image file (e.g., .png, .svg, .jpg) that is directly embeddable in an HTML <img> tag. If a direct image link is not found, provide a placeholder or a link to a page where the logo is prominently displayed. IMPORTANT: Ensure each company name is distinct and not combined with other company names (e.g., 'Uber' not 'Uber, DoorDash'). The output MUST be a JSON string matching the following schema: ${JSON.stringify(
+      aiDiscoveryPrompt.output_schema
+    )}`;
+
     const response = await callGeminiApi(
       userInput,
       aiDiscoveryPrompt.system_instruction,
@@ -91,7 +113,7 @@ export async function callCompanyDiscoveryAI(preferencePrompt?: string): Promise
       undefined // Removed responseSchema here
     );
     console.log("Gemini API response received:", response);
-    
+
     return JSON.parse(response) as CompanyDiscoveryList;
   } catch (error) {
     console.error("Error in callCompanyDiscoveryAI:", error);
@@ -99,10 +121,14 @@ export async function callCompanyDiscoveryAI(preferencePrompt?: string): Promise
   }
 }
 
-export async function callDueDiligenceAI(companyName: string): Promise<ScoreData> {
+export async function callDueDiligenceAI(
+  companyName: string
+): Promise<ScoreData> {
   try {
-    const userInput = `Perform a comprehensive due diligence analysis on the company "${companyName}". Use your search tool to find recent, verifiable data from government, NGO, and news databases regarding their compliance with UN Sustainable Development Goals (UNSDGs). Based on your findings, generate a detailed report structured according to the provided schema. The output MUST be a JSON string matching the following schema: ${JSON.stringify(aiDueDiligencePrompt.output_schema)}`;
-    
+    const userInput = `Perform a comprehensive due diligence analysis on the company "${companyName}". Use your search tool to find recent, verifiable data from government, NGO, and news databases regarding their compliance with UN Sustainable Development Goals (UNSDGs). Also, find the company's official logo URL and its primary industry/sector category. Based on your findings, generate a detailed report structured according to the provided schema. The output MUST be a JSON string matching the following schema: ${JSON.stringify(
+      aiDueDiligencePrompt.output_schema
+    )}`;
+
     const response = await callGeminiApi(
       userInput,
       aiDueDiligencePrompt.system_instruction,
@@ -116,10 +142,16 @@ export async function callDueDiligenceAI(companyName: string): Promise<ScoreData
   }
 }
 
-export async function callActivismAI(scoreData: ScoreData): Promise<ActivismPlan> {
+export async function callActivismAI(
+  scoreData: ScoreData
+): Promise<ActivismPlan> {
   try {
-    const userInput = `Based on the following risk data JSON, generate a three-point activism plan focusing on economic, political, and social pressure.\n\n${JSON.stringify(scoreData, null, 2)}`;
-    
+    const userInput = `Based on the following risk data JSON, generate a three-point activism plan focusing on economic, political, and social pressure.\n\n${JSON.stringify(
+      scoreData,
+      null,
+      2
+    )}`;
+
     const response = await callGeminiApi(
       userInput,
       aiActivismPrompt.system_instruction,
@@ -128,7 +160,10 @@ export async function callActivismAI(scoreData: ScoreData): Promise<ActivismPlan
     );
     return JSON.parse(response) as ActivismPlan;
   } catch (error) {
-    console.error(`Error in callActivismAI for ${scoreData.company_name}:`, error);
+    console.error(
+      `Error in callActivismAI for ${scoreData.company_name}:`,
+      error
+    );
     throw error;
   }
 }
