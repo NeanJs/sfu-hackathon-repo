@@ -10,7 +10,7 @@ import { TabBar } from './components/tabbar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Transparency Ledger',
+  title: 'Leadger',
   description: 'Disclosing companies\' actions towards politics',
 }
 

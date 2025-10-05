@@ -141,7 +141,7 @@ function HomeContent() {
       content: (
         <div className="card-elevated p-3 sm:p-4">
           <div className="text-center py-12">
-            <h3 className="text-2xl font-bold mb-4">About Transparency Ledger</h3>
+            <h3 className="text-2xl font-bold mb-4">About Leadger</h3>
             <p className="text-muted-foreground">Learn more about our mission and values</p>
           </div>
         </div>
@@ -157,7 +157,7 @@ function HomeContent() {
             <span className="text-sm font-medium text-primary">Political Transparency</span>
           </div>
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="gradient-text">Transparency Ledger</span>
+            <span className="gradient-text">Leadger</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Disclosing companies' actions and influence towards politics
@@ -191,13 +191,6 @@ function HomeContent() {
         )}
       </CardOverlay>
       
-      {/* Debug info */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="fixed bottom-4 right-4 bg-black/80 text-white p-2 rounded text-xs z-[70]">
-          <div>Overlay Open: {overlayOpen ? 'Yes' : 'No'}</div>
-          <div>Active Company: {activeCompanyName || 'None'}</div>
-        </div>
-      )}
     </main>
   )
 }
@@ -212,7 +205,7 @@ export default function Home() {
               <span className="text-sm font-medium text-primary">Political Transparency</span>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="gradient-text">Transparency Ledger</span>
+              <span className="gradient-text">Leadger</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Disclosing companies' actions and influence towards politics

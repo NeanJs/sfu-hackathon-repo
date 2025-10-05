@@ -275,7 +275,7 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
               className={[
                 "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-2xl border border-border bg-background shadow-soft overflow-hidden hover:border-primary hover:shadow-medium transition-all duration-200",
                 "cursor-pointer",
-                isSelected && "border-orange-400 bg-orange-50/50"
+                isSelected && "border-accent bg-accent/10"
               ].join(' ')}
             >
               <LogoBanner company={c} />

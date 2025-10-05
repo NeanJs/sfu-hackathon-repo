@@ -32,8 +32,8 @@ export default function ButtonBar() {
                   'w-full rounded-full text-sm md:text-base font-medium transition-all duration-200',
                   'px-2 md:px-3 py-1 md:py-2',
                   a.variant === 'secondary'
-                    ? 'bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:border-white/50 backdrop-blur-sm'
-                    : 'bg-blue-500/40 text-white border border-blue-400/50 hover:bg-blue-500/50 hover:border-blue-400/70 backdrop-blur-sm',
+                    ? 'bg-secondary/80 text-secondary-foreground border border-white/20 hover:bg-secondary hover:border-white/30 backdrop-blur-sm'
+                    : 'bg-primary/80 text-primary-foreground border border-white/20 hover:bg-primary hover:border-white/30 backdrop-blur-sm',
                   a.disabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg active:scale-95'
                 ].join(' ')}
               >

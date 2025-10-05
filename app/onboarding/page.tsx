@@ -51,7 +51,7 @@ export default function OnboardingPage() {
               </svg>
             </div>
             <h1 className="text-5xl sm:text-6xl font-black tracking-tight text-white drop-shadow-2xl mb-6">
-              Welcome to <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">Transparency Ledger</span>
+              Welcome to <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">Leadger</span>
             </h1>
             <p className="mt-6 text-white/90 text-lg sm:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
               Answer a few quick questions so we can personalize company insights to your values and preferences.
