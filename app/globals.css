@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
+/* :root {
+  --background: #f9fbfd;
   --foreground: #171717;
   --primary: #0ea5e9;
   --primary-foreground: #ffffff;
@@ -16,7 +16,23 @@
   --border: #e2e8f0;
   --input: #e2e8f0;
   --ring: #0ea5e9;
+} */
+ :root {
+  --background: #f9fbfd; /* brand-grey */
+  --foreground: #171717;
+  --primary: #008E98; /* brand-teal */
+  --primary-foreground: #ffffff;
+  --secondary: #005679; /* brand-blue */
+  --secondary-foreground: #ffffff;
+  --accent: #F78200; /* brand-orange */
+  --accent-foreground: #ffffff;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #008E98; /* match primary */
 }
+
 
 
 * {

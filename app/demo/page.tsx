@@ -613,13 +613,10 @@ export default function DemoPage() {
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12 animate-slide-up">
-          <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
-            <span className="text-sm font-medium text-primary">Component Demo</span>
-          </div>
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="gradient-text">Component Showcase</span>
+            <span className="text-black">Component Showcase</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl font-semibold text-black max-w-2xl mx-auto leading-relaxed">
             Explore all available components and their features
           </p>
         </div>
