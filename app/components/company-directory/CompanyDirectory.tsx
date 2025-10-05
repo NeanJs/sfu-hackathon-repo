@@ -82,7 +82,11 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
     if (loadStateRef.current === 'loading') return
     setLoadState('loading')
     const result = await queryCompanies({ search: debouncedSearch, page: pageToLoad, pageSize: PAGE_SIZE, category: selectedCategory })
-    setItems((prev) => [...prev, ...result.items])
+    setItems((prev) => {
+      const existingIds = new Set(prev.map(item => item.id))
+      const newItems = result.items.filter(item => !existingIds.has(item.id))
+      return [...prev, ...newItems]
+    })
     setHasMore(result.hasMore)
     const nextState: LoadState = result.hasMore ? 'idle' : 'done'
     setLoadState(nextState)

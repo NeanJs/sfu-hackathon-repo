@@ -118,7 +118,7 @@ export default function UserForm({ formId, initialValues, onSubmitted, className
       actions.push({ id: 'next', label: 'Continue', onClick: goNext })
     }
     return actions
-  }, [loading, def, canGoBack, isLastStep, submitting])
+  }, [loading, def, canGoBack, isLastStep, submitting, values])
 
   useButtonBarActions(buttonActions)
 
