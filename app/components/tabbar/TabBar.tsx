@@ -18,8 +18,8 @@ export default function TabBar() {
   const pathname = usePathname()
   const { open } = useSearchOverlay()
 
-  // Hide tab bar on onboarding page
-  if (pathname === '/onboarding') {
+  // Hide tab bar on onboarding and auth pages
+  if (pathname === '/onboarding' || pathname?.startsWith('/auth')) {
     return null
   }
 

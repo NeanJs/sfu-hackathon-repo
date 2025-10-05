@@ -12,8 +12,11 @@ export default function ButtonBar() {
 
   if (!actions || actions.length === 0) return null
 
-  // Hide tab bar on onboarding page, so button bar should be at bottom with safe space
-  const isTabBarHidden = pathname === '/onboarding'
+  // Hide on onboarding route; align with full-screen experiences
+  if (pathname === '/onboarding') return null
+
+  // Tab bar is hidden on onboarding and auth; compute safe bottom spacing accordingly
+  const isTabBarHidden = pathname === '/onboarding' || pathname?.startsWith('/auth')
   const bottomPosition = isTabBarHidden ? 'bottom-4' : 'bottom-20 sm:bottom-24'
 
   return (

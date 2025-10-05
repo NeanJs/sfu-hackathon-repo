@@ -15,9 +15,9 @@ import {
   Firestore,
 } from "firebase/firestore";
 import { UserPreferences, ProfileQuestion } from "./types";
+import { firebaseConfig } from "../../firebase.config";
 
 declare const __app_id: string;
-declare const __firebase_config: string;
 declare const __initial_auth_token: string;
 
 let auth: Auth;
@@ -26,7 +26,6 @@ let app: FirebaseApp;
 
 function initializeFirebase() {
   if (!getApps().length) {
-    const firebaseConfig = JSON.parse(__firebase_config);
     app = initializeApp(firebaseConfig);
   } else {
     app = getApp();
