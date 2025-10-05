@@ -42,10 +42,12 @@ function CompanyCardSkeleton() {
 function LogoBanner({ company }: { company: Company }) {
   const [errored, setErrored] = useState(false)
   const initials = useMemo(() => getInitials(company.name), [company.name])
+  const hasLogo = company.logoUrl && company.logoUrl.trim() !== ''
+  
   return (
     <div className="aspect-[16/10] w-full overflow-hidden rounded-xl border bg-secondary/40">
-      {errored ? (
-        <div className="flex h-full w-full items-center justify-center text-3xl sm:text-4xl font-semibold text-secondary-foreground">
+      {!hasLogo || errored ? (
+        <div className="flex h-full w-full items-center justify-center text-3xl sm:text-4xl font-semibold text-black">
           {initials}
         </div>
       ) : (
