@@ -65,17 +65,35 @@ interface CompanyDirectoryProps {
   multiselect?: boolean;
   onSelectionChange?: (selectedCompanies: Company[]) => void;
   onCompanyOpen?: (company: Company) => void;
+  initialCompanies?: any[];
+  initialTitle?: string;
 }
 
-export default function CompanyDirectory({
-  selectable = false,
-  multiselect = true,
-  onSelectionChange,
-  onCompanyOpen,
-}: CompanyDirectoryProps) {
+export default function CompanyDirectory(props: CompanyDirectoryProps) {
+  const {
+    selectable = false,
+    multiselect = true,
+    onSelectionChange,
+    onCompanyOpen,
+    initialCompanies,
+    initialTitle,
+  } = props;
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [items, setItems] = useState<Company[]>([]);
+  const [items, setItems] = useState<Company[]>(() => {
+    if (initialCompanies && initialCompanies.length > 0) {
+      // Map API company format to Company type
+      return initialCompanies.map((c, idx) => ({
+        id: `${idx + 1}-${c.company_name?.trim() || 'Unknown'}`,
+        name: c.company_name?.trim() || 'Unknown',
+        category: c.category || 'Unknown',
+        logoUrl: '',
+        website: '',
+        summary: c.summary_violation || '',
+      }));
+    }
+    return [];
+  });
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loadState, setLoadState] = useState<LoadState>("idle");
@@ -84,7 +102,7 @@ export default function CompanyDirectory({
   const [selectedCompanies, setSelectedCompanies] = useState<Set<string>>(
     new Set()
   );
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(initialTitle || "");
   const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<CompanyCategory[]>([]);
 
@@ -106,10 +124,12 @@ export default function CompanyDirectory({
   }, [search]);
 
   useEffect(() => {
-    setItems([]);
-    setPage(0);
-    setHasMore(true);
-  }, [debouncedSearch, selectedCategory]);
+    if (!initialCompanies || initialCompanies.length === 0) {
+      setItems([]);
+      setPage(0);
+      setHasMore(true);
+    }
+  }, [debouncedSearch, selectedCategory, initialCompanies]);
 
   const loadPage = useCallback(
     async (pageToLoad: number) => {
@@ -144,8 +164,10 @@ export default function CompanyDirectory({
   );
 
   useEffect(() => {
-    loadPage(0);
-  }, [loadPage]);
+    if (!initialCompanies || initialCompanies.length === 0) {
+      loadPage(0);
+    }
+  }, [loadPage, initialCompanies]);
 
   useEffect(() => {
     let mounted = true;

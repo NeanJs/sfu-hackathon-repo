@@ -1,23 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Testimonials from "./components/testimonials/Testimonials";
 import About from "./components/about/About";
 import HelpCenter from "./components/help-center/HelpCenter";
 import { useRouter } from "next/navigation";
+import AuthModal from "./components/auth/AuthModal";
+import { auth } from "@/firebase.config";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 type TabKey = "home" | "testimonials" | "settings" | "about" | "help";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabKey>("home");
+  const [authOpen, setAuthOpen] = useState<"login" | "signup" | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const router = useRouter();
 
   const handleTabChange = (tabId: TabKey) => {
     setActiveTab(tabId);
   };
-
   const tabs: Record<TabKey, JSX.Element> = {
     home: (
       <div className="flex flex-col md:flex-row items-center justify-between gap-12 p-8">
@@ -44,7 +48,7 @@ export default function Home() {
         </div>
         <div className="flex-shrink-0">
           <Image
-            src="/landing-image1.jpg"
+            src="/landingimage.jpg"
             alt="Landing visual"
             width={450}
             height={450}
@@ -74,6 +78,13 @@ export default function Home() {
     { id: "testimonials", label: "Testimonials" },
     { id: "help", label: "Help Center" },
   ] as const;
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>
@@ -121,35 +132,36 @@ export default function Home() {
           </nav>
 
           {/* Header Buttons */}
-          <div className="relative flex items-center gap-2">
-            <button
-              onClick={() => alert("Sign In clicked!")}
-              className="px-3 py-2 rounded-lg border transition-all duration-200 bg-background/80 text-foreground border-border hover:bg-accent hover:text-accent-foreground hover:border-accent"
-              aria-label="Sign In"
-            >
-              Sign In
-            </button>
-
-            <button
-              className="px-3 py-2 text-lg font-semibold rounded-lg bg-orange-500 text-white hover:bg-orange-600 transition-all duration-200"
-              onClick={() => alert("Sign Up clicked!")}
-            >
-              SIGN UP
-            </button>
-          </div>
+          {!currentUser ? (
+            <div className="relative flex items-center gap-2">
+              <button
+                onClick={() => setAuthOpen("login")}
+                className="px-3 py-2 rounded-lg border transition-all duration-200 bg-background/80 text-foreground border-border hover:bg-accent hover:text-accent-foreground hover:border-accent"
+                aria-label="Sign In"
+              >
+                Sign In
+              </button>
+              <button
+                className="px-3 py-2 text-lg font-semibold rounded-lg bg-orange-500 text-white hover:bg-orange-600 transition-all duration-200"
+                onClick={() => setAuthOpen("signup")}
+              >
+                SIGN UP
+              </button>
+            </div>
+          ) : (
+            <div>
+              <span>{currentUser.email}</span>
+              <button
+                onClick={() => auth.signOut()}
+                className="ml-4 px-3 py-2 rounded-lg border transition-all duration-200 bg-background/80 text-foreground border-border hover:bg-accent hover:text-accent-foreground hover:border-accent"
+                aria-label="Sign Out"
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
 
           {/* Settings Button */}
-          <button
-            onClick={() => handleTabChange("settings")}
-            className={`px-3 py-2 rounded-lg border transition-all duration-200 ${
-              activeTab === "settings"
-                ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                : "bg-background/80 text-foreground border-border hover:bg-accent hover:text-accent-foreground hover:border-accent"
-            }`}
-            aria-label="Settings"
-          >
-            Settings
-          </button>
         </header>
 
         {/* Main Content */}
@@ -185,6 +197,9 @@ export default function Home() {
             &copy; {new Date().getFullYear()} Leadger.tech. All rights reserved.
           </div>
         </footer>
+
+        {/* Auth Modal */}
+        <AuthModal open={!!authOpen} onClose={() => setAuthOpen(null)} />
       </div>
     </>
   );
