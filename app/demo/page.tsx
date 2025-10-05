@@ -22,20 +22,19 @@ export default function DemoPage() {
 
   const buttonBarActions = useMemo(() => {
     if (activeTab === 'company-directory-selectable') {
-      if (selectedCompanies.length === 0) {
-        return null
-      }
       return [
         {
           id: 'clear-selection',
           label: 'Clear Selection',
           variant: 'secondary' as const,
-          onClick: () => setSelectedCompanies([])
+          onClick: () => setSelectedCompanies([]),
+          disabled: selectedCompanies.length === 0
         },
         {
           id: 'export-selected',
           label: `Export (${selectedCompanies.length})`,
-          onClick: () => console.log('Exporting:', selectedCompanies)
+          onClick: () => console.log('Exporting:', selectedCompanies),
+          disabled: selectedCompanies.length === 0
         }
       ]
     }
