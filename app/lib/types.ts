@@ -1,15 +1,15 @@
 // --- USER PROFILE & PREFERENCES ---
 export interface UserPreferences {
-  economicStance: string; // E.g., 'Pro-regulation'
-  environmentalStance: string; // E.g., 'Aggressive climate action'
-  laborStance: string; // E.g., 'Strong union support'
-  socialStance: string; // E.g., 'Prioritize community wealth'
+  pmv_future: 'Less' | 'Stay the same' | 'More';
+  pmv_protection: 'Protecting traditional values' | 'Balancing tradition and progress' | 'Supporting social change';
+  pmv_economy: 'Lower taxes and markets' | 'Mixed approach' | 'Programs to reduce inequality';
 }
 
 export interface ProfileQuestion {
   key: keyof UserPreferences;
   question: string;
-  placeholder: string;
+  options: { value: UserPreferences[keyof UserPreferences]; label: string; pmv: 'A' | 'B' | 'C' }[];
+  criteria: Record<string, string>; // Changed to Record<string, string> for flexibility
 }
 
 // --- COMPANY DATA MODELS ---
