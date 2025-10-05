@@ -5,6 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Company, CompanyCategory } from './data'
 import { queryCompanies, getDiscoveryListTitle, getCategories } from './data'
+import { LoadingSpinner } from '../loading-spinner'
 
 type LoadState = 'idle' | 'loading' | 'done'
 
@@ -262,7 +263,7 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
 
       <div className="mt-4 flex items-center justify-center">
         {loadState === 'loading' && (
-          <div className="text-sm text-muted-foreground">Loading…</div>
+          <LoadingSpinner size="md" variant="muted" label="Loading companies..." />
         )}
         {error && (
           <div className="text-sm text-red-600">{error}</div>
