@@ -18,6 +18,8 @@ export default function CardOverlay({
   ariaLabel = 'Overlay dialog'
 }: CardOverlayProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
+  
+  console.log('CardOverlay render:', { isOpen, title, children: !!children })
 
   useEffect(() => {
     if (isOpen) {
@@ -43,7 +45,7 @@ export default function CardOverlay({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-stretch justify-center p-0 sm:p-3 md:p-6"
+      className="fixed inset-0 z-[60] flex items-stretch justify-center p-0 sm:p-3 md:p-6"
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}

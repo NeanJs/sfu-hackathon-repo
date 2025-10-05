@@ -25,8 +25,11 @@ function HomeContent() {
   }
 
   const openOverlayForName = useCallback((name: string) => {
+    console.log('openOverlayForName called with:', name)
+    console.log('Setting overlay state...')
     setActiveCompanyName(name)
     setOverlayOpen(true)
+    console.log('Overlay state should now be:', { overlayOpen: true, activeCompanyName: name })
     const params = new URLSearchParams(searchParams?.toString() || '')
     params.set('company', toSlug(name))
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
@@ -43,15 +46,22 @@ function HomeContent() {
 
   useEffect(() => {
     const slug = searchParams?.get('company') || ''
+    console.log('URL searchParams changed, slug:', slug)
     if (slug) {
       const name = fromSlug(slug)
+      console.log('Setting overlay from URL:', name)
       setActiveCompanyName(name)
       setOverlayOpen(true)
     } else {
+      console.log('No company in URL, closing overlay')
       setOverlayOpen(false)
       setActiveCompanyName('')
     }
   }, [searchParams])
+
+  useEffect(() => {
+    console.log('Overlay state changed:', { overlayOpen, activeCompanyName })
+  }, [overlayOpen, activeCompanyName])
 
   const handleSelectionChange = (selectedCompanies: Company[]) => {
     console.log('Selected companies:', selectedCompanies)
@@ -62,6 +72,8 @@ function HomeContent() {
   }
 
   const handleCompanyOpen = (company: Company) => {
+    console.log('handleCompanyOpen called with:', company)
+    console.log('Current overlay state:', { overlayOpen, activeCompanyName })
     openOverlayForName(company.name)
   }
 
@@ -178,6 +190,14 @@ function HomeContent() {
           <CompanyDetail key={`${activeCompanyName}:${retryKey}`} companyName={activeCompanyName} />
         )}
       </CardOverlay>
+      
+      {/* Debug info */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="fixed bottom-4 right-4 bg-black/80 text-white p-2 rounded text-xs z-[70]">
+          <div>Overlay Open: {overlayOpen ? 'Yes' : 'No'}</div>
+          <div>Active Company: {activeCompanyName || 'None'}</div>
+        </div>
+      )}
     </main>
   )
 }

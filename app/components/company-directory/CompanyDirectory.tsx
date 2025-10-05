@@ -20,7 +20,11 @@ function getInitials(name: string): string {
 
 function CompanyCardSkeleton() {
   return (
-    <article className="rounded-2xl border border-border bg-background shadow-soft overflow-hidden">
+    <article 
+      className="rounded-2xl border border-border bg-background shadow-soft overflow-hidden animate-pulse"
+      role="gridcell"
+      aria-label="Loading company information"
+    >
       <div className="aspect-[16/10] w-full overflow-hidden rounded-xl border bg-secondary/40">
         <Skeleton variant="rect" className="h-full w-full" />
       </div>
@@ -153,8 +157,15 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
   }, [page, loadPage, hasMore])
 
   const handleItemActivate = (c: Company) => {
+    console.log('Company clicked:', c.name)
+    console.log('onCompanyOpen function:', onCompanyOpen)
     if (selectable) toggleCompanySelection(c.id)
-    onCompanyOpen?.(c)
+    if (onCompanyOpen) {
+      console.log('Calling onCompanyOpen with:', c)
+      onCompanyOpen(c)
+    } else {
+      console.log('onCompanyOpen is not defined!')
+    }
   }
 
 
