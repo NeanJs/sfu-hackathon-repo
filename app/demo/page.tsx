@@ -5,6 +5,7 @@ import CompanyDirectory from '../components/company-directory/CompanyDirectory'
 import Tabs, { type Tab } from '../components/tabs/Tabs'
 import type { Company } from '../components/company-directory/data'
 import { useButtonBarActions } from '../components/button-bar/ButtonBarProvider'
+import { UserForm } from '../components/userform'
 
 export default function DemoPage() {
   const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([])
@@ -90,6 +91,21 @@ export default function DemoPage() {
   useButtonBarActions(buttonBarActions)
 
   const tabs: Tab[] = [
+    {
+      id: 'userform-demo',
+      label: 'UserForm',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">UserForm</h2>
+            <p className="text-muted-foreground">Mobile-first, multi-step form with bottom button bar</p>
+          </div>
+          <div className="card-elevated p-4 sm:p-6">
+            <UserForm formId="demo-user-form" />
+          </div>
+        </div>
+      )
+    },
     {
       id: 'company-directory-basic',
       label: 'Company Directory',
