@@ -1,29 +1,6 @@
-// Functionality: Types and local mock data source
+// Functionality: Types and API-driven data source
 
-export type CompanyCategory =
-  | 'Fintech'
-  | 'Health'
-  | 'SaaS'
-  | 'AI'
-  | 'Retail'
-  | 'Education'
-  | 'Climate'
-  | 'Gaming'
-  | 'Security'
-  | 'Logistics'
-
-export const ALL_CATEGORIES: CompanyCategory[] = [
-  'Fintech',
-  'Health',
-  'SaaS',
-  'AI',
-  'Retail',
-  'Education',
-  'Climate',
-  'Gaming',
-  'Security',
-  'Logistics',
-]
+export type CompanyCategory = string
 
 export type Company = {
   id: string
@@ -31,6 +8,7 @@ export type Company = {
   category: CompanyCategory
   logoUrl: string
   website: string
+  summary?: string
 }
 
 export type QueryParams = {
@@ -45,160 +23,56 @@ export type QueryResult = {
   total: number
   hasMore: boolean
 }
+type ApiDiscoveryCompany = {
+  company_name?: string
+  category?: string
+  summary_violation?: string
+}
 
-const companies: Company[] = [
-  {
-    id: '1',
-    name: 'Apex Finance',
-    category: 'Fintech',
-    logoUrl: 'https://picsum.photos/seed/apex/96',
-    website: 'https://example.com/apex',
-  },
-  {
-    id: '2',
-    name: 'Healix Labs',
-    category: 'Health',
-    logoUrl: 'https://picsum.photos/seed/healix/96',
-    website: 'https://example.com/healix',
-  },
-  {
-    id: '3',
-    name: 'Nimbus Cloud',
-    category: 'SaaS',
-    logoUrl: 'https://picsum.photos/seed/nimbus/96',
-    website: 'https://example.com/nimbus',
-  },
-  {
-    id: '4',
-    name: 'Cortex AI',
-    category: 'AI',
-    logoUrl: 'https://picsum.photos/seed/cortex/96',
-    website: 'https://example.com/cortex',
-  },
-  {
-    id: '5',
-    name: 'Mercury Retail',
-    category: 'Retail',
-    logoUrl: 'https://picsum.photos/seed/mercury/96',
-    website: 'https://example.com/mercury',
-  },
-  {
-    id: '6',
-    name: 'LearnLoop',
-    category: 'Education',
-    logoUrl: 'https://picsum.photos/seed/learnloop/96',
-    website: 'https://example.com/learnloop',
-  },
-  {
-    id: '7',
-    name: 'TerraGreen',
-    category: 'Climate',
-    logoUrl: 'https://picsum.photos/seed/terragreen/96',
-    website: 'https://example.com/terragreen',
-  },
-  {
-    id: '8',
-    name: 'PixelForge Games',
-    category: 'Gaming',
-    logoUrl: 'https://picsum.photos/seed/pixelforge/96',
-    website: 'https://example.com/pixelforge',
-  },
-  {
-    id: '9',
-    name: 'Sentinel Secure',
-    category: 'Security',
-    logoUrl: 'https://picsum.photos/seed/sentinel/96',
-    website: 'https://example.com/sentinel',
-  },
-  {
-    id: '10',
-    name: 'SwiftLogix',
-    category: 'Logistics',
-    logoUrl: 'https://picsum.photos/seed/swiftlogix/96',
-    website: 'https://example.com/swiftlogix',
-  },
-  {
-    id: '11',
-    name: 'QuantumPay',
-    category: 'Fintech',
-    logoUrl: 'https://picsum.photos/seed/quantumpay/96',
-    website: 'https://example.com/quantumpay',
-  },
-  {
-    id: '12',
-    name: 'MediTech Solutions',
-    category: 'Health',
-    logoUrl: 'https://picsum.photos/seed/meditech/96',
-    website: 'https://example.com/meditech',
-  },
-  {
-    id: '13',
-    name: 'CloudSync Pro',
-    category: 'SaaS',
-    logoUrl: 'https://picsum.photos/seed/cloudsync/96',
-    website: 'https://example.com/cloudsync',
-  },
-  {
-    id: '14',
-    name: 'NeuralNet Dynamics',
-    category: 'AI',
-    logoUrl: 'https://picsum.photos/seed/neuralnet/96',
-    website: 'https://example.com/neuralnet',
-  },
-  {
-    id: '15',
-    name: 'UrbanMart',
-    category: 'Retail',
-    logoUrl: 'https://picsum.photos/seed/urbanmart/96',
-    website: 'https://example.com/urbanmart',
-  },
-  {
-    id: '16',
-    name: 'EduTech Innovations',
-    category: 'Education',
-    logoUrl: 'https://picsum.photos/seed/edutech/96',
-    website: 'https://example.com/edutech',
-  },
-  {
-    id: '17',
-    name: 'EcoFlow Systems',
-    category: 'Climate',
-    logoUrl: 'https://picsum.photos/seed/ecoflow/96',
-    website: 'https://example.com/ecoflow',
-  },
-  {
-    id: '18',
-    name: 'GameCraft Studios',
-    category: 'Gaming',
-    logoUrl: 'https://picsum.photos/seed/gamecraft/96',
-    website: 'https://example.com/gamecraft',
-  },
-  {
-    id: '19',
-    name: 'CyberShield',
-    category: 'Security',
-    logoUrl: 'https://picsum.photos/seed/cybershield/96',
-    website: 'https://example.com/cybershield',
-  },
-  {
-    id: '20',
-    name: 'FleetMaster',
-    category: 'Logistics',
-    logoUrl: 'https://picsum.photos/seed/fleetmaster/96',
-    website: 'https://example.com/fleetmaster',
-  },
-]
+type ApiDiscoveryResponse = {
+  discovery_list_title?: string
+  companies?: ApiDiscoveryCompany[]
+} | null
+
+const API_ENDPOINT = '/api/public-discovery'
+
+let cachedCompanies: Company[] | null = null
+let cachedTitle: string | null = null
+
+async function loadFromApi(): Promise<void> {
+  const res = await fetch(API_ENDPOINT)
+  if (!res.ok) throw new Error('Failed to load discovery list')
+  const json: ApiDiscoveryResponse = await res.json()
+  const list = json?.companies ?? []
+  cachedTitle = json?.discovery_list_title ?? ''
+  cachedCompanies = list.map((c, idx) => {
+    const name = c.company_name?.trim() || 'Unknown'
+    return {
+      id: `${idx + 1}-${name}`,
+      name,
+      category: (c.category || 'Unknown') as CompanyCategory,
+      logoUrl: '',
+      website: '',
+      summary: c.summary_violation || '',
+    }
+  })
+}
 
 export async function queryCompanies({ search, page, pageSize, category }: QueryParams): Promise<QueryResult> {
+  if (!cachedCompanies) {
+    await loadFromApi()
+  }
+  const source = cachedCompanies ?? []
   const normalizedSearch = search.trim().toLowerCase()
 
   const filteredBySearch = normalizedSearch
-    ? companies.filter((c) => {
-        const matchesName = c.name.toLowerCase().includes(normalizedSearch)
-        const matchesCategory = c.category.toLowerCase().includes(normalizedSearch)
-        return matchesName || matchesCategory
+    ? source.filter((c) => {
+        const inName = c.name.toLowerCase().includes(normalizedSearch)
+        const inCategory = c.category.toLowerCase().includes(normalizedSearch)
+        const inSummary = (c.summary || '').toLowerCase().includes(normalizedSearch)
+        return inName || inCategory || inSummary
       })
-    : companies
+    : source
 
   const filtered = category
     ? filteredBySearch.filter((c) => c.category === category)
@@ -210,13 +84,22 @@ export async function queryCompanies({ search, page, pageSize, category }: Query
   const total = filtered.length
   const hasMore = end < total
 
-  await new Promise((r) => setTimeout(r, 120))
-
   return { items, total, hasMore }
 }
 
-export function getAllForPrefetch(): Company[] {
-  return companies
+export function getDiscoveryListTitle(): string | null {
+  return cachedTitle
 }
 
 
+export async function getCategories(): Promise<CompanyCategory[]> {
+  if (!cachedCompanies) {
+    await loadFromApi()
+  }
+  const categories = new Set<CompanyCategory>()
+  for (const c of cachedCompanies ?? []) {
+    const cat = (c.category || '').trim()
+    if (cat) categories.add(cat as CompanyCategory)
+  }
+  return Array.from(categories).sort((a, b) => a.localeCompare(b))
+}

@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #0ea5e9;
+  --background: #F9FBFD; /* Backgrounds Grey */
+  --foreground: #0f172a;
+  --primary: #008E98; /* Primary Teal */
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --accent: #d946ef;
-  --accent-foreground: #ffffff;
-  --muted: #f8fafc;
+  --secondary: #005679; /* Secondary Blue */
+  --secondary-foreground: #ffffff;
+  --accent: #F78200; /* Orange for highlights/hover */
+  --accent-foreground: #0f172a;
+  --muted: #edf2f7;
   --muted-foreground: #64748b;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #0ea5e9;
+  --ring: #008E98;
 }
 
 
@@ -122,6 +122,30 @@ body {
   .animate-scale-in {
     animation: scaleIn 0.3s ease-out;
   }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  .pb-safe-area {
+    /* Bottom padding to accommodate TabBar (72px) + ButtonBar (when visible) + safe area */
+    padding-bottom: max(6rem, env(safe-area-inset-bottom) + 6rem);
+  }
+  
+  .skeleton {
+    @apply bg-muted animate-pulse rounded;
+  }
+  
+  .skeleton-shimmer {
+    @apply relative overflow-hidden bg-muted rounded;
+  }
+  
+  .skeleton-shimmer::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent;
+    animation: skeleton-shimmer-subtle 2s ease-in-out infinite;
+    transform: translateX(-100%);
+  }
 }
 
 @keyframes fadeIn {
@@ -137,4 +161,25 @@ body {
 @keyframes scaleIn {
   0% { transform: scale(0.95); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes skeleton-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes skeleton-shimmer-subtle {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
 }
