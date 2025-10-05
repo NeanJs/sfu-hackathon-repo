@@ -8,6 +8,7 @@ import { useButtonBarActions } from '../components/button-bar/ButtonBarProvider'
 import { UserForm } from '../components/userform'
 import { InfoCard } from '../components/infocard'
 import { BarChart } from '../components/barchart'
+import { Histogram } from '../components/histogram'
 
 export default function DemoPage() {
   const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([])
@@ -399,6 +400,134 @@ export default function DemoPage() {
       )
     },
     {
+      id: 'histogram-demo',
+      label: 'Histogram',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Histogram Component</h2>
+            <p className="text-muted-foreground">Mobile-first responsive histogram with explicit bins and count/density scaling</p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="card-elevated p-3 sm:p-4">
+              <Histogram
+                title="Sales Distribution (Count)"
+                series={[
+                  { 
+                    id: 'Q1 Sales', 
+                    values: [1.2, 1.5, 1.8, 2.1, 2.3, 2.7, 3.0, 3.2, 3.5, 3.8, 4.1, 4.3, 4.7, 5.0, 5.2],
+                    color: '#2563eb'
+                  },
+                  { 
+                    id: 'Q2 Sales', 
+                    values: [1.0, 1.3, 1.6, 1.9, 2.2, 2.5, 2.8, 3.1, 3.4, 3.7, 4.0, 4.3, 4.6, 4.9, 5.2],
+                    color: '#10b981'
+                  }
+                ]}
+                bins={{ binWidth: 1.5, domain: [0.5, 5.5] }}
+                yScale="count"
+                xTitle="Sales Amount"
+                yTitle="Frequency"
+                unit="$M"
+                height={500}
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <Histogram
+                title="Response Times (Density)"
+                series={[
+                  { 
+                    id: 'API Calls', 
+                    values: [50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450],
+                    color: '#f59e0b'
+                  }
+                ]}
+                bins={{ binWidth: 100, domain: [25, 475] }}
+                yScale="density"
+                xTitle="Response Time"
+                yTitle="Density"
+                unit="ms"
+                height={500}
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <Histogram
+                title="Customer Satisfaction Scores"
+                series={[
+                  { 
+                    id: 'Mobile Users', 
+                    values: [3.2, 3.5, 3.8, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0],
+                    color: '#8b5cf6'
+                  },
+                  { 
+                    id: 'Desktop Users', 
+                    values: [3.0, 3.3, 3.6, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8],
+                    color: '#ef4444'
+                  }
+                ]}
+                bins={{ binEdges: [2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5] }}
+                yScale="count"
+                xTitle="Satisfaction Score"
+                yTitle="Count"
+                unit="stars"
+                height={500}
+              />
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <Histogram
+                title="Revenue Distribution (Density)"
+                series={[
+                  { 
+                    id: 'Enterprise', 
+                    values: [100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800],
+                    color: '#06b6d4'
+                  },
+                  { 
+                    id: 'SMB', 
+                    values: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+                    color: '#84cc16'
+                  }
+                ]}
+                bins={{ binWidth: 200, domain: [0, 900] }}
+                yScale="density"
+                xTitle="Revenue"
+                yTitle="Density"
+                unit="$K"
+                height={500}
+              />
+            </div>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <h3 className="text-lg font-semibold mb-4">Features</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Explicit bin width or bin edges</li>
+                <li>• Shared bins across multiple series</li>
+                <li>• Count vs density scaling</li>
+                <li>• Stacked multi-series visualization</li>
+                <li>• Responsive SVG rendering</li>
+                <li>• Built-in legend and grid lines</li>
+              </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Mobile-first responsive design</li>
+                <li>• Customizable colors per series</li>
+                <li>• Axis labels with units</li>
+                <li>• Self-contained component</li>
+                <li>• Consistent binning for comparisons</li>
+                <li>• Density normalization support</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'button-bar-demo',
       label: 'Button Bar Demo',
       content: (
         <div className="space-y-6">
