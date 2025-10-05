@@ -2,7 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Company } from "../lib/types";
+import type { Company } from "../components/company-directory/data";
 import CompanyDirectory from "../components/company-directory/CompanyDirectory";
 import Tabs, { Tab } from "../components/tabs/Tabs";
 import { CardOverlay } from "../components/card-overlay";

@@ -1,23 +1,24 @@
 "use client";
 
 import { useState } from "react";
-
 import Image from "next/image";
 import Testimonials from "./components/testimonials/Testimonials";
 import About from "./components/about/About";
 import HelpCenter from "./components/help-center/HelpCenter";
 import { useRouter } from "next/navigation";
 
+type TabKey = "home" | "testimonials" | "settings" | "about" | "help";
+
 export default function Home() {
-  const [activeTab, setActiveTab] = useState("home");
+  const [activeTab, setActiveTab] = useState<TabKey>("home");
 
   const router = useRouter();
 
-  const handleTabChange = (tabId: string) => {
+  const handleTabChange = (tabId: TabKey) => {
     setActiveTab(tabId);
   };
 
-  const tabs = {
+  const tabs: Record<TabKey, JSX.Element> = {
     home: (
       <div className="flex flex-col md:flex-row items-center justify-between gap-12 p-8">
         <div className="text-left max-w-2xl">
@@ -72,7 +73,7 @@ export default function Home() {
     { id: "about", label: "About" },
     { id: "testimonials", label: "Testimonials" },
     { id: "help", label: "Help Center" },
-  ];
+  ] as const;
 
   return (
     <>
@@ -107,7 +108,7 @@ export default function Home() {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => handleTabChange(item.id)}
+                onClick={() => handleTabChange(item.id as TabKey)}
                 className={`px-3 py-2 rounded-lg text-lg font-medium border transition-all duration-200 ${
                   activeTab === item.id
                     ? "bg-primary text-primary-foreground border-primary shadow-sm"
