@@ -232,7 +232,7 @@ export default function CompanyDetail({ companyName, data, className = '' }: Com
                             {i + 1}
                           </div>
                           <div className="flex-1">
-                            <div className="font-bold text-foreground mb-2 text-lg">{((a.label || a.category) ? (a.label || a.category).replace(/\b\w/g, l => l.toUpperCase()) : `Action ${i + 1}`)}</div>
+                            <div className="font-bold text-foreground mb-2 text-lg">{((a.label || a.category) ? (a.label || a.category)!.replace(/\b\w/g, l => l.toUpperCase()) : `Action ${i + 1}`)}</div>
                             <div className="text-sm text-muted-foreground leading-relaxed">{a.description}</div>
                           </div>
                         </div>

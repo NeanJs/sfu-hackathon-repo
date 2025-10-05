@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import CompanyDirectory from './components/company-directory/CompanyDirectory'
 import Tabs, { type Tab } from './components/tabs/Tabs'
@@ -8,7 +8,7 @@ import { CardOverlay } from './components/card-overlay'
 import { CompanyDetail } from './components/company-detail'
 import type { Company } from './components/company-directory/data'
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -179,5 +179,39 @@ export default function Home() {
         )}
       </CardOverlay>
     </main>
+  )
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
+        <div className="container mx-auto px-4 py-8 pb-safe-area">
+          <div className="text-center mb-12 animate-slide-up">
+            <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
+              <span className="text-sm font-medium text-primary">Political Transparency</span>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              <span className="gradient-text">Transparency Ledger</span>
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Disclosing companies' actions and influence towards politics
+            </p>
+          </div>
+          <div className="max-w-5xl mx-auto">
+            <div className="card-elevated p-8 text-center">
+              <div className="animate-pulse">
+                <div className="h-8 bg-muted rounded mb-4"></div>
+                <div className="h-4 bg-muted rounded mb-2"></div>
+                <div className="h-4 bg-muted rounded mb-2"></div>
+                <div className="h-4 bg-muted rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    }>
+      <HomeContent />
+    </Suspense>
   )
 }

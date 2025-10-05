@@ -131,6 +131,21 @@ body {
     /* Bottom padding to accommodate TabBar (72px) + ButtonBar (when visible) + safe area */
     padding-bottom: max(6rem, env(safe-area-inset-bottom) + 6rem);
   }
+  
+  .skeleton {
+    @apply bg-muted animate-pulse rounded;
+  }
+  
+  .skeleton-shimmer {
+    @apply relative overflow-hidden bg-muted rounded;
+  }
+  
+  .skeleton-shimmer::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent;
+    animation: skeleton-shimmer-subtle 2s ease-in-out infinite;
+    transform: translateX(-100%);
+  }
 }
 
 @keyframes fadeIn {
@@ -151,4 +166,20 @@ body {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes skeleton-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes skeleton-shimmer-subtle {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
 }

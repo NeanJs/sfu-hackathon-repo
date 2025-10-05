@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Company, CompanyCategory } from './data'
 import { queryCompanies, getDiscoveryListTitle, getCategories } from './data'
-import { LoadingSpinner } from '../loading-spinner'
+import { Skeleton } from '../skeleton'
 
 type LoadState = 'idle' | 'loading' | 'done'
 
@@ -16,6 +16,22 @@ function getInitials(name: string): string {
   const first = parts[0]?.[0] ?? ''
   const last = parts.length > 1 ? parts[parts.length - 1][0] : ''
   return (first + last).toUpperCase() || name.slice(0, 2).toUpperCase()
+}
+
+function CompanyCardSkeleton() {
+  return (
+    <article className="rounded-2xl border border-border bg-background shadow-soft overflow-hidden">
+      <div className="aspect-[16/10] w-full overflow-hidden rounded-xl border bg-secondary/40">
+        <Skeleton variant="rect" className="h-full w-full" />
+      </div>
+      <div className="px-3 py-4 text-center space-y-2">
+        <Skeleton variant="text" size="lg" width="80%" className="mx-auto" />
+        <Skeleton variant="text" size="md" width="60%" className="mx-auto" />
+        <Skeleton variant="text" size="sm" width="90%" className="mx-auto" />
+        <Skeleton variant="text" size="sm" width="70%" className="mx-auto" />
+      </div>
+    </article>
+  )
 }
 
 function LogoBanner({ company }: { company: Company }) {
@@ -265,14 +281,27 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
             </article>
           )
         })}
+        
+        {loadState === 'loading' && items.length === 0 && (
+          <>
+            {Array.from({ length: PAGE_SIZE }).map((_, index) => (
+              <CompanyCardSkeleton key={`skeleton-${index}`} />
+            ))}
+          </>
+        )}
+        
+        {loadState === 'loading' && items.length > 0 && (
+          <>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <CompanyCardSkeleton key={`pagination-skeleton-${index}`} />
+            ))}
+          </>
+        )}
       </div>
 
       <div ref={sentinelRef} className="h-10" aria-hidden="true" />
 
       <div className="mt-4 flex items-center justify-center">
-        {loadState === 'loading' && (
-          <LoadingSpinner size="md" variant="muted" label="Loading companies..." />
-        )}
         {error && (
           <div className="text-sm text-red-600">{error}</div>
         )}

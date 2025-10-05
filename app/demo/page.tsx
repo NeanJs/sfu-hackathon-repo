@@ -10,6 +10,7 @@ import { InfoCard } from '../components/infocard'
 import { BarChart } from '../components/barchart'
 import { Histogram } from '../components/histogram'
 import { CardOverlay } from '../components/card-overlay'
+import { Skeleton, SkeletonText, SkeletonCard, SkeletonAvatar, SkeletonButton } from '../components/skeleton'
 
 export default function DemoPage() {
   const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([])
@@ -591,6 +592,200 @@ export default function DemoPage() {
                   Open CardOverlay Demo
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'skeleton-demo',
+      label: 'Skeleton',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Skeleton Component</h2>
+            <p className="text-muted-foreground">Generic loading skeleton components with shimmer animation</p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-4">Text Skeletons</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Single line (md)</p>
+                  <SkeletonText size="md" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Multiple lines (3 lines)</p>
+                  <SkeletonText lines={3} size="md" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Different sizes</p>
+                  <div className="space-y-2">
+                    <SkeletonText size="xs" />
+                    <SkeletonText size="sm" />
+                    <SkeletonText size="lg" />
+                    <SkeletonText size="xl" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Custom width</p>
+                  <SkeletonText width="60%" />
+                  <SkeletonText width="40%" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-4">Avatar Skeletons</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Different sizes</p>
+                  <div className="flex items-center gap-4">
+                    <SkeletonAvatar size="xs" />
+                    <SkeletonAvatar size="sm" />
+                    <SkeletonAvatar size="md" />
+                    <SkeletonAvatar size="lg" />
+                    <SkeletonAvatar size="xl" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Circle variant</p>
+                  <div className="flex items-center gap-4">
+                    <Skeleton variant="circle" size="sm" />
+                    <Skeleton variant="circle" size="md" />
+                    <Skeleton variant="circle" size="lg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-4">Button Skeletons</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Different sizes</p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <SkeletonButton size="xs" />
+                    <SkeletonButton size="sm" />
+                    <SkeletonButton size="md" />
+                    <SkeletonButton size="lg" />
+                    <SkeletonButton size="xl" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Custom widths</p>
+                  <div className="space-y-2">
+                    <SkeletonButton width="120px" />
+                    <SkeletonButton width="80px" />
+                    <SkeletonButton width="200px" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-elevated p-3 sm:p-4">
+              <h3 className="text-lg font-semibold mb-4">Card Skeletons</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Basic card</p>
+                  <SkeletonCard />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Card without avatar</p>
+                  <SkeletonCard showAvatar={false} />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Card without actions</p>
+                  <SkeletonCard showActions={false} />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <h3 className="text-lg font-semibold mb-4">Real-world Examples</h3>
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm text-muted-foreground mb-3">User profile loading</p>
+                <div className="card p-4">
+                  <div className="flex items-center space-x-4">
+                    <SkeletonAvatar size="lg" />
+                    <div className="flex-1 space-y-2">
+                      <SkeletonText size="lg" width="40%" />
+                      <SkeletonText size="sm" width="60%" />
+                      <SkeletonText size="sm" width="30%" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <p className="text-sm text-muted-foreground mb-3">Article list loading</p>
+                <div className="space-y-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="card p-4">
+                      <div className="flex space-x-3">
+                        <Skeleton variant="rect" width="80px" height="60px" />
+                        <div className="flex-1 space-y-2">
+                          <SkeletonText size="md" width="80%" />
+                          <SkeletonText lines={2} size="sm" />
+                          <div className="flex items-center space-x-2">
+                            <SkeletonAvatar size="xs" />
+                            <SkeletonText size="xs" width="100px" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <p className="text-sm text-muted-foreground mb-3">Form loading</p>
+                <div className="card p-4">
+                  <div className="space-y-4">
+                    <div>
+                      <SkeletonText size="sm" width="60px" />
+                      <Skeleton variant="rect" height="40px" className="mt-1" />
+                    </div>
+                    <div>
+                      <SkeletonText size="sm" width="80px" />
+                      <Skeleton variant="rect" height="40px" className="mt-1" />
+                    </div>
+                    <div>
+                      <SkeletonText size="sm" width="100px" />
+                      <Skeleton variant="rect" height="80px" className="mt-1" />
+                    </div>
+                    <div className="flex gap-2 pt-2">
+                      <SkeletonButton width="80px" />
+                      <SkeletonButton width="60px" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <h3 className="text-lg font-semibold mb-4">Features</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Multiple variants: text, avatar, button, card, circle, rect</li>
+                <li>• Size presets: xs, sm, md, lg, xl</li>
+                <li>• Custom width and height support</li>
+                <li>• Multi-line text skeletons</li>
+                <li>• Shimmer animation effect</li>
+                <li>• Composable components</li>
+              </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Mobile-first responsive design</li>
+                <li>• Consistent with design system</li>
+                <li>• Easy to customize and extend</li>
+                <li>• TypeScript support</li>
+                <li>• Accessibility friendly</li>
+                <li>• Self-contained components</li>
+              </ul>
             </div>
           </div>
         </div>
