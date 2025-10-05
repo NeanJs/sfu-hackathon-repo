@@ -7,8 +7,24 @@ import CompanyDirectory from "../components/company-directory/CompanyDirectory";
 import Tabs, { Tab } from "../components/tabs/Tabs";
 import { CardOverlay } from "../components/card-overlay";
 import { CompanyDetail } from "../components/company-detail";
+import UserPreferencesBarChart from "../components/dashboard/UserPreferencesBarChart";
 
 function HomeContent() {
+  // Read companyList from sessionStorage if available
+  const [initialCompanies, setInitialCompanies] = useState<any[] | undefined>(undefined);
+  const [initialTitle, setInitialTitle] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("leadger_companyList");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          setInitialCompanies(parsed.companies);
+          setInitialTitle(parsed.discovery_list_title);
+        } catch {}
+      }
+    }
+  }, []);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -82,6 +98,8 @@ function HomeContent() {
           <CompanyDirectory
             selectable={false}
             onCompanyOpen={handleCompanyOpen}
+            initialCompanies={initialCompanies}
+            initialTitle={initialTitle}
           />
         </div>
       ),
@@ -91,11 +109,12 @@ function HomeContent() {
       label: "Analytics",
       content: (
         <div className="card-elevated p-3 sm:p-4">
-          <div className="text-center py-12">
+          <div className="text-center py-8">
             <h3 className="text-2xl font-bold mb-4">Analytics Dashboard</h3>
-            <p className="text-muted-foreground">
-              Coming soon - detailed analytics and insights
+            <p className="text-muted-foreground mb-8">
+              See where users fall on key values (Economy, Future, Protection)
             </p>
+            <UserPreferencesBarChart />
           </div>
         </div>
       ),
