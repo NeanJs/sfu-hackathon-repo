@@ -1,10 +1,58 @@
 'use client'
 
+import { useCallback, useEffect, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import CompanyDirectory from './components/company-directory/CompanyDirectory'
 import Tabs, { type Tab } from './components/tabs/Tabs'
+import { CardOverlay } from './components/card-overlay'
+import { CompanyDetail } from './components/company-detail'
 import type { Company } from './components/company-directory/data'
 
 export default function Home() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const [overlayOpen, setOverlayOpen] = useState(false)
+  const [activeCompanyName, setActiveCompanyName] = useState<string>('')
+  const [retryKey, setRetryKey] = useState(0)
+
+  const toSlug = (name: string): string => {
+    return name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+  }
+
+  const fromSlug = (slug: string): string => {
+    return slug.replace(/-/g, ' ').trim()
+  }
+
+  const openOverlayForName = useCallback((name: string) => {
+    setActiveCompanyName(name)
+    setOverlayOpen(true)
+    const params = new URLSearchParams(searchParams?.toString() || '')
+    params.set('company', toSlug(name))
+    router.push(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [pathname, router, searchParams])
+
+  const closeOverlay = useCallback(() => {
+    setOverlayOpen(false)
+    setActiveCompanyName('')
+    const params = new URLSearchParams(searchParams?.toString() || '')
+    params.delete('company')
+    const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname
+    router.push(nextUrl, { scroll: false })
+  }, [pathname, router, searchParams])
+
+  useEffect(() => {
+    const slug = searchParams?.get('company') || ''
+    if (slug) {
+      const name = fromSlug(slug)
+      setActiveCompanyName(name)
+      setOverlayOpen(true)
+    } else {
+      setOverlayOpen(false)
+      setActiveCompanyName('')
+    }
+  }, [searchParams])
+
   const handleSelectionChange = (selectedCompanies: Company[]) => {
     console.log('Selected companies:', selectedCompanies)
   }
@@ -13,13 +61,17 @@ export default function Home() {
     console.log('Active tab changed to:', tabId)
   }
 
+  const handleCompanyOpen = (company: Company) => {
+    openOverlayForName(company.name)
+  }
+
   const tabs: Tab[] = [
     {
       id: 'companies',
       label: 'Companies',
       content: (
         <div className="card-elevated p-3 sm:p-4">
-          <CompanyDirectory selectable={false} />
+          <CompanyDirectory selectable={false} onCompanyOpen={handleCompanyOpen} />
         </div>
       )
     },
@@ -107,6 +159,25 @@ export default function Home() {
           className="max-w-5xl mx-auto"
         />
       </div>
+
+      <CardOverlay
+        isOpen={overlayOpen}
+        onClose={closeOverlay}
+        title={activeCompanyName || 'Company'}
+        headerRight={activeCompanyName ? (
+          <button
+            type="button"
+            onClick={() => setRetryKey(k => k + 1)}
+            className="btn-secondary px-3 py-1.5 text-sm"
+          >
+            Retry
+          </button>
+        ) : null}
+      >
+        {overlayOpen && activeCompanyName && (
+          <CompanyDetail key={`${activeCompanyName}:${retryKey}`} companyName={activeCompanyName} />
+        )}
+      </CardOverlay>
     </main>
   )
 }

@@ -44,9 +44,10 @@ interface CompanyDirectoryProps {
   selectable?: boolean
   multiselect?: boolean
   onSelectionChange?: (selectedCompanies: Company[]) => void
+  onCompanyOpen?: (company: Company) => void
 }
 
-export default function CompanyDirectory({ selectable = false, multiselect = true, onSelectionChange }: CompanyDirectoryProps) {
+export default function CompanyDirectory({ selectable = false, multiselect = true, onSelectionChange, onCompanyOpen }: CompanyDirectoryProps) {
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [items, setItems] = useState<Company[]>([])
@@ -134,6 +135,11 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
     if (page === 0 || !hasMore) return
     loadPage(page)
   }, [page, loadPage, hasMore])
+
+  const handleItemActivate = (c: Company) => {
+    if (selectable) toggleCompanySelection(c.id)
+    onCompanyOpen?.(c)
+  }
 
 
   const toggleCompanySelection = (companyId: string) => {
@@ -232,14 +238,16 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
       <div role="grid" aria-rowcount={items.length} className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
         {items.map((c) => {
           const isSelected = selectedCompanies.has(c.id)
-          return (
+        return (
             <article
               key={c.id}
               role="gridcell"
-              onClick={() => selectable && toggleCompanySelection(c.id)}
+              tabIndex={0}
+              onClick={() => handleItemActivate(c)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleItemActivate(c) } }}
               className={[
                 "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-2xl border border-border bg-background shadow-soft overflow-hidden hover:border-primary hover:shadow-medium transition-all duration-200",
-                selectable && "cursor-pointer",
+                "cursor-pointer",
                 isSelected && "border-orange-400 bg-orange-50/50"
               ].join(' ')}
             >

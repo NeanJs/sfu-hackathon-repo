@@ -9,11 +9,13 @@ import { UserForm } from '../components/userform'
 import { InfoCard } from '../components/infocard'
 import { BarChart } from '../components/barchart'
 import { Histogram } from '../components/histogram'
+import { CardOverlay } from '../components/card-overlay'
 
 export default function DemoPage() {
   const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([])
   const [singleSelectedCompanies, setSingleSelectedCompanies] = useState<Company[]>([])
   const [activeTab, setActiveTab] = useState('company-directory-basic')
+  const [isCardOverlayOpen, setIsCardOverlayOpen] = useState(false)
 
   const handleSelectionChange = (companies: Company[]) => {
     setSelectedCompanies(companies)
@@ -557,6 +559,44 @@ export default function DemoPage() {
       )
     },
     {
+      id: 'card-overlay-demo',
+      label: 'CardOverlay',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">CardOverlay Component</h2>
+            <p className="text-muted-foreground">Full-screen overlay container with sticky header and close button</p>
+          </div>
+          
+          <div className="card-elevated p-3 sm:p-4">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold">Features</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Full-screen overlay with backdrop blur</li>
+                <li>• Sticky header with close button</li>
+                <li>• Optional footer and header actions</li>
+                <li>• Mobile-first responsive design</li>
+                <li>• Keyboard navigation (Esc to close)</li>
+                <li>• Click backdrop to close</li>
+                <li>• Body scroll lock while open</li>
+                <li>• Self-contained component</li>
+              </ul>
+              
+              <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                <p className="text-sm text-primary font-medium mb-4">Try the CardOverlay!</p>
+                <button 
+                  onClick={() => setIsCardOverlayOpen(true)}
+                  className="btn-primary"
+                >
+                  Open CardOverlay Demo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    },
+    {
       id: 'component-features',
       label: 'Component Features',
       content: (
@@ -631,6 +671,130 @@ export default function DemoPage() {
           className="max-w-6xl mx-auto"
         />
       </div>
+
+      <CardOverlay
+        isOpen={isCardOverlayOpen}
+        onClose={() => setIsCardOverlayOpen(false)}
+        title="CardOverlay Demo"
+        headerRight={
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Sample</span>
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          </div>
+        }
+        footer={
+          <div className="flex justify-end gap-2">
+            <button 
+              onClick={() => setIsCardOverlayOpen(false)}
+              className="btn-secondary"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={() => setIsCardOverlayOpen(false)}
+              className="btn-primary"
+            >
+              Save Changes
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-2">Welcome to CardOverlay!</h2>
+            <p className="text-muted-foreground">This is a sample of the CardOverlay component with various content inside.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="card p-4">
+              <h3 className="text-lg font-semibold mb-2">Sample InfoCard</h3>
+              <InfoCard
+                data={{
+                  id: 'overlay-sample',
+                  title: 'Sample Card',
+                  body: 'This InfoCard is embedded inside the CardOverlay to demonstrate composability.',
+                  media: [
+                    {
+                      kind: 'image',
+                      src: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1200&auto=format&fit=crop',
+                      alt: 'Sample image',
+                      aspectRatio: '16/9'
+                    }
+                  ]
+                }}
+              />
+            </div>
+
+            <div className="card p-4">
+              <h3 className="text-lg font-semibold mb-2">Sample Chart</h3>
+              <BarChart
+                title="Sample Data"
+                data={[
+                  { category: 'A', value: 100 },
+                  { category: 'B', value: 200 },
+                  { category: 'C', value: 150 },
+                  { category: 'D', value: 300 },
+                ]}
+                xTitle="Categories"
+                yTitle="Values"
+                unit="units"
+                sort="value-desc"
+                barColor="#0ea5e9"
+              />
+            </div>
+          </div>
+
+          <div className="card p-4">
+            <h3 className="text-lg font-semibold mb-3">Sample Form</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Name</label>
+                <input 
+                  type="text" 
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+                  placeholder="Enter your name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input 
+                  type="email" 
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+                  placeholder="Enter your email"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Message</label>
+                <textarea 
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+                  rows={3}
+                  placeholder="Enter your message"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="card p-4">
+            <h3 className="text-lg font-semibold mb-3">Features Demonstrated</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Sticky header with title and close button</li>
+                <li>• Optional header actions (green dot indicator)</li>
+                <li>• Scrollable content area</li>
+                <li>• Optional footer with action buttons</li>
+                <li>• Backdrop blur and click-to-close</li>
+              </ul>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>• Mobile-first responsive design</li>
+                <li>• Keyboard navigation (Esc to close)</li>
+                <li>• Body scroll lock while open</li>
+                <li>• Self-contained component</li>
+                <li>• Composable with other components</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </CardOverlay>
     </main>
   )
 }
