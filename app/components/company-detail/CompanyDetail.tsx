@@ -5,7 +5,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import type { CompanyDetailProps, CompanyFullAnalysis, Violation } from './types'
 import { fetchCompanyFullAnalysis } from './api'
-import { LoadingSpinner } from '../loading-spinner'
+import { getCachedCompanyDetail } from './cache'
+import { Skeleton, SkeletonText, SkeletonCard, SkeletonAvatar } from '../skeleton'
 
 function KeyValue({ label, value, icon }: { label: string; value?: React.ReactNode; icon?: string }) {
   if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) return null
@@ -103,6 +104,221 @@ function ExtraInfo({ data }: { data: CompanyFullAnalysis }) {
   )
 }
 
+function CompanyDetailSkeleton() {
+  return (
+    <div className="w-full space-y-12">
+      {/* Company Identity Section Skeleton */}
+      <section className="w-full mb-12 animate-in">
+        <div className="flex items-center gap-4 mb-8 relative">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center text-white text-xl font-bold shadow-xl shadow-primary/25">
+            🏢
+          </div>
+          <div className="flex-1">
+            <Skeleton variant="text" size="xl" width="60%" className="mb-2" />
+            <div className="h-1 w-20 bg-gradient-to-r from-primary to-accent rounded-full opacity-60"></div>
+          </div>
+        </div>
+        <div className="card-elevated p-10 border-l-4 border-l-primary/30">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
+            <div className="flex-shrink-0 relative">
+              <SkeletonAvatar size="xl" className="h-24 w-24 sm:h-28 sm:w-28 rounded-3xl" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <Skeleton variant="text" size="xl" width="80%" className="mb-3" />
+              <Skeleton variant="text" size="lg" width="50%" className="mb-6" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+                    📊
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <Skeleton variant="text" size="xs" width="40%" className="mb-2" />
+                    <Skeleton variant="text" size="sm" width="60%" />
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+                    ⚠️
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <Skeleton variant="text" size="xs" width="50%" className="mb-2" />
+                    <Skeleton variant="text" size="sm" width="70%" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Risk Assessment Section Skeleton */}
+      <section className="w-full mb-12 animate-in">
+        <div className="flex items-center gap-4 mb-8 relative">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center text-white text-xl font-bold shadow-xl shadow-primary/25">
+            🔍
+          </div>
+          <div className="flex-1">
+            <Skeleton variant="text" size="xl" width="50%" className="mb-2" />
+            <div className="h-1 w-20 bg-gradient-to-r from-primary to-accent rounded-full opacity-60"></div>
+          </div>
+        </div>
+        <div className="card-elevated p-8 border-l-4 border-l-orange-500/30">
+          <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+              📋
+            </div>
+            <div className="flex-1 min-w-0">
+              <Skeleton variant="text" size="xs" width="30%" className="mb-2" />
+              <SkeletonText lines={3} size="sm" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Violations Section Skeleton */}
+      <section className="w-full mb-12 animate-in">
+        <div className="flex items-center gap-4 mb-8 relative">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center text-white text-xl font-bold shadow-xl shadow-primary/25">
+            ⚠️
+          </div>
+          <div className="flex-1">
+            <Skeleton variant="text" size="xl" width="55%" className="mb-2" />
+            <div className="h-1 w-20 bg-gradient-to-r from-primary to-accent rounded-full opacity-60"></div>
+          </div>
+        </div>
+        <div className="grid gap-6">
+          <div className="card-elevated p-8 border-l-4 border-l-red-500/30">
+            <div className="flex items-start gap-6 mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/20 flex items-center justify-center text-red-500 text-2xl font-bold shadow-lg">
+                ⚠️
+              </div>
+              <div className="flex-1">
+                <Skeleton variant="text" size="lg" width="60%" className="mb-2" />
+                <Skeleton variant="text" size="sm" width="30%" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+                  🎯
+                </div>
+                <div className="flex-1 min-w-0">
+                  <Skeleton variant="text" size="xs" width="40%" className="mb-2" />
+                  <Skeleton variant="text" size="sm" width="70%" />
+                </div>
+              </div>
+              <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+                  📅
+                </div>
+                <div className="flex-1 min-w-0">
+                  <Skeleton variant="text" size="xs" width="30%" className="mb-2" />
+                  <Skeleton variant="text" size="sm" width="50%" />
+                </div>
+              </div>
+              <div className="sm:col-span-2">
+                <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+                    📝
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <Skeleton variant="text" size="xs" width="25%" className="mb-2" />
+                    <SkeletonText lines={2} size="sm" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Activism Plan Section Skeleton */}
+      <section className="w-full mb-12 animate-in">
+        <div className="flex items-center gap-4 mb-8 relative">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center text-white text-xl font-bold shadow-xl shadow-primary/25">
+            ✊
+          </div>
+          <div className="flex-1">
+            <Skeleton variant="text" size="xl" width="45%" className="mb-2" />
+            <div className="h-1 w-20 bg-gradient-to-r from-primary to-accent rounded-full opacity-60"></div>
+          </div>
+        </div>
+        <div className="card-elevated p-8 border-l-4 border-l-green-500/30">
+          <div className="space-y-8">
+            <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+                📝
+              </div>
+              <div className="flex-1 min-w-0">
+                <Skeleton variant="text" size="xs" width="35%" className="mb-2" />
+                <SkeletonText lines={3} size="sm" />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center text-green-500 text-lg font-bold shadow-lg">
+                  ✓
+                </div>
+                <Skeleton variant="text" size="lg" width="50%" />
+              </div>
+              <div className="grid gap-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="p-6 bg-gradient-to-br from-green-50/80 to-blue-50/80 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl border border-green-200/50 dark:border-green-800/50">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center text-green-500 text-lg font-bold flex-shrink-0 shadow-md">
+                        {i}
+                      </div>
+                      <div className="flex-1">
+                        <Skeleton variant="text" size="lg" width="60%" className="mb-2" />
+                        <SkeletonText lines={2} size="sm" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Impact & Status Section Skeleton */}
+      <section className="w-full mb-12 animate-in">
+        <div className="flex items-center gap-4 mb-8 relative">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center text-white text-xl font-bold shadow-xl shadow-primary/25">
+            🌱
+          </div>
+          <div className="flex-1">
+            <Skeleton variant="text" size="xl" width="40%" className="mb-2" />
+            <div className="h-1 w-20 bg-gradient-to-r from-primary to-accent rounded-full opacity-60"></div>
+          </div>
+        </div>
+        <div className="card-elevated p-8 border-l-4 border-l-emerald-500/30">
+          <div className="grid gap-6">
+            <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+                💰
+              </div>
+              <div className="flex-1 min-w-0">
+                <Skeleton variant="text" size="xs" width="50%" className="mb-2" />
+                <SkeletonText lines={2} size="sm" />
+              </div>
+            </div>
+            <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-background via-background to-primary/5 rounded-2xl border border-border/40">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary text-lg font-bold shadow-sm">
+                🔧
+              </div>
+              <div className="flex-1 min-w-0">
+                <Skeleton variant="text" size="xs" width="45%" className="mb-2" />
+                <SkeletonText lines={2} size="sm" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
 export default function CompanyDetail({ companyName, data, className = '' }: CompanyDetailProps) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -113,6 +329,14 @@ export default function CompanyDetail({ companyName, data, className = '' }: Com
   useEffect(() => {
     let mounted = true
     if (!data && companyName) {
+      // Check cache first for immediate data availability
+      const cachedData = getCachedCompanyDetail(companyName)
+      if (cachedData) {
+        setFetched(cachedData)
+        return
+      }
+
+      // Only show loading if no cached data
       setLoading(true)
       setError(null)
       fetchCompanyFullAnalysis(companyName)
@@ -137,9 +361,7 @@ export default function CompanyDetail({ companyName, data, className = '' }: Com
   if (loading && !effectiveData) {
     return (
       <div className={[`w-full`, className].join(' ')}>
-        <div className="card-elevated p-6 flex items-center justify-center min-h-48">
-          <LoadingSpinner size="lg" label="Loading company details" />
-        </div>
+        <CompanyDetailSkeleton />
       </div>
     )
   }
