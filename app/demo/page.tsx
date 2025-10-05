@@ -8,11 +8,17 @@ import { useButtonBarActions } from '../components/button-bar/ButtonBarProvider'
 
 export default function DemoPage() {
   const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([])
+  const [singleSelectedCompanies, setSingleSelectedCompanies] = useState<Company[]>([])
   const [activeTab, setActiveTab] = useState('company-directory-basic')
 
   const handleSelectionChange = (companies: Company[]) => {
     setSelectedCompanies(companies)
     console.log('Selected companies:', companies)
+  }
+
+  const handleSingleSelectionChange = (companies: Company[]) => {
+    setSingleSelectedCompanies(companies)
+    console.log('Single selected companies:', companies)
   }
 
   const handleTabChange = (tabId: string) => {
@@ -39,6 +45,24 @@ export default function DemoPage() {
       ]
     }
     
+    if (activeTab === 'company-directory-single-select') {
+      return [
+        {
+          id: 'clear-single-selection',
+          label: 'Clear Selection',
+          variant: 'secondary' as const,
+          onClick: () => setSingleSelectedCompanies([]),
+          disabled: singleSelectedCompanies.length === 0
+        },
+        {
+          id: 'export-single-selected',
+          label: `Export (${singleSelectedCompanies.length})`,
+          onClick: () => console.log('Exporting:', singleSelectedCompanies),
+          disabled: singleSelectedCompanies.length === 0
+        }
+      ]
+    }
+    
     if (activeTab === 'button-bar-demo') {
       return [
         {
@@ -61,7 +85,7 @@ export default function DemoPage() {
     }
 
     return null
-  }, [activeTab, selectedCompanies])
+  }, [activeTab, selectedCompanies, singleSelectedCompanies])
 
   useButtonBarActions(buttonBarActions)
 
@@ -91,13 +115,41 @@ export default function DemoPage() {
             <p className="text-muted-foreground">Company directory with selection capabilities</p>
           </div>
           <div className="card-elevated p-4 sm:p-6">
-            <CompanyDirectory selectable={true} onSelectionChange={handleSelectionChange} />
+            <CompanyDirectory selectable={true} multiselect={true} onSelectionChange={handleSelectionChange} />
           </div>
           {selectedCompanies.length > 0 && (
             <div className="card-elevated p-4 sm:p-6">
               <h3 className="text-lg font-semibold mb-3">Selected Companies ({selectedCompanies.length})</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {selectedCompanies.map((company) => (
+                  <div key={company.id} className="flex items-center gap-2 p-2 bg-secondary/20 rounded-lg">
+                    <span className="text-sm font-medium">{company.name}</span>
+                    <span className="text-xs text-muted-foreground">({company.category})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )
+    },
+    {
+      id: 'company-directory-single-select',
+      label: 'Single Select Directory',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Single Select Company Directory</h2>
+            <p className="text-muted-foreground">Company directory with single selection mode</p>
+          </div>
+          <div className="card-elevated p-4 sm:p-6">
+            <CompanyDirectory selectable={true} multiselect={false} onSelectionChange={handleSingleSelectionChange} />
+          </div>
+          {singleSelectedCompanies.length > 0 && (
+            <div className="card-elevated p-4 sm:p-6">
+              <h3 className="text-lg font-semibold mb-3">Selected Company ({singleSelectedCompanies.length})</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {singleSelectedCompanies.map((company) => (
                   <div key={company.id} className="flex items-center gap-2 p-2 bg-secondary/20 rounded-lg">
                     <span className="text-sm font-medium">{company.name}</span>
                     <span className="text-xs text-muted-foreground">({company.category})</span>

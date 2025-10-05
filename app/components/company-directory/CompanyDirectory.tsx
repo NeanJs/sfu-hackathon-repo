@@ -41,10 +41,11 @@ function LogoBanner({ company }: { company: Company }) {
 
 interface CompanyDirectoryProps {
   selectable?: boolean
+  multiselect?: boolean
   onSelectionChange?: (selectedCompanies: Company[]) => void
 }
 
-export default function CompanyDirectory({ selectable = false, onSelectionChange }: CompanyDirectoryProps) {
+export default function CompanyDirectory({ selectable = false, multiselect = true, onSelectionChange }: CompanyDirectoryProps) {
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [items, setItems] = useState<Company[]>([])
@@ -113,11 +114,23 @@ export default function CompanyDirectory({ selectable = false, onSelectionChange
 
   const toggleCompanySelection = (companyId: string) => {
     setSelectedCompanies(prev => {
-      const newSet = new Set(prev)
-      if (newSet.has(companyId)) {
-        newSet.delete(companyId)
+      let newSet: Set<string>
+      
+      if (multiselect) {
+        // Multiselect mode: toggle selection
+        newSet = new Set(prev)
+        if (newSet.has(companyId)) {
+          newSet.delete(companyId)
+        } else {
+          newSet.add(companyId)
+        }
       } else {
-        newSet.add(companyId)
+        // Single-select mode: replace selection
+        if (prev.has(companyId)) {
+          newSet = new Set() // Deselect if already selected
+        } else {
+          newSet = new Set([companyId]) // Select only this company
+        }
       }
       
       // Notify parent component of selection changes
