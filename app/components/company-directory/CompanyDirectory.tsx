@@ -178,7 +178,7 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
             className={[
               'inline-flex items-center justify-center rounded-full border px-3 py-2 text-xs sm:text-sm transition-colors',
               selectedCategory === null
-                ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                ? 'bg-primary text-primary-foregrou`nd border-primary shadow-sm'
                 : 'bg-background/80 text-foreground hover:bg-accent hover:text-accent-foreground'
             ].join(' ')}
           >
