@@ -107,7 +107,7 @@ export default function Tabs({ tabs, defaultActiveTab, onTabChange, className = 
   return (
     <div className={`w-full ${className}`}>
       <div className="relative">
-        <div className="flex items-center">
+        <div className="flex items-center min-h-[44px]">
           {canScrollLeft && (
             <button
               type="button"
@@ -136,7 +136,7 @@ export default function Tabs({ tabs, defaultActiveTab, onTabChange, className = 
 
           <div
             ref={scrollContainerRef}
-            className="flex overflow-x-auto scrollbar-hide gap-1 px-2 sm:px-4"
+            className="flex overflow-x-auto scrollbar-hide gap-1 px-2 sm:px-4 py-1"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {tabs.map((tab) => (
@@ -148,7 +148,7 @@ export default function Tabs({ tabs, defaultActiveTab, onTabChange, className = 
                 type="button"
                 onClick={() => handleTabClick(tab.id)}
                 className={[
-                  'flex-shrink-0 px-3 py-2 text-sm font-medium rounded-lg border transition-all duration-200 whitespace-nowrap',
+                  'flex-shrink-0 px-3 py-2.5 text-sm font-medium rounded-lg border transition-all duration-200 whitespace-nowrap',
                   'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
                   activeTab === tab.id
                     ? 'bg-primary text-primary-foreground border-primary shadow-sm'

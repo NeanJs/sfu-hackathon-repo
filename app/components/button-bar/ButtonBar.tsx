@@ -3,18 +3,25 @@
 // Functionality: Fixed bottom responsive button bar
 
 import React from 'react'
+import { usePathname } from 'next/navigation'
 import { useButtonBar } from './ButtonBarProvider'
 
 export default function ButtonBar() {
   const { actions } = useButtonBar()
+  const pathname = usePathname()
 
   if (!actions || actions.length === 0) return null
 
+  // Hide tab bar on onboarding page, so button bar should be at bottom with safe space
+  const isTabBarHidden = pathname === '/onboarding'
+  const bottomPosition = isTabBarHidden ? 'bottom-4' : 'bottom-20 sm:bottom-24'
+
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex items-end justify-center p-3 md:p-4" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 0px)' }}>
-      <div className="pointer-events-auto w-full">
-        <div className="rounded-2xl border border-border bg-background/80 backdrop-blur-md shadow-medium">
-          <div className={['grid gap-2 md:gap-3 px-3 md:px-4', 'py-2 md:py-4'].join(' ')} style={{ gridTemplateColumns: `repeat(${actions.length}, minmax(0, 1fr))` }}>
+    <div className={`pointer-events-none fixed inset-x-0 ${bottomPosition} z-50 flex items-end justify-center p-3 md:p-4`} style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 0px)' }}>
+      <div className="pointer-events-auto w-full max-w-[720px]">
+        <div className="relative rounded-full border border-black/10 bg-black/20 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.25)]">
+          <div className="absolute inset-px rounded-[999px] bg-gradient-to-b from-white/5 to-white/2 z-0" />
+          <div className={['relative z-10 grid gap-2 md:gap-3 px-2 md:px-3', 'py-1 md:py-2'].join(' ')} style={{ gridTemplateColumns: `repeat(${actions.length}, minmax(0, 1fr))` }}>
             {actions.map((a) => (
               <button
                 key={a.id}
@@ -22,11 +29,11 @@ export default function ButtonBar() {
                 disabled={a.disabled}
                 onClick={() => a.onClick(a.data)}
                 className={[
-                  'w-full rounded-xl text-sm md:text-base font-medium transition-all duration-200',
-                  'px-3 md:px-5 py-2 md:py-3',
+                  'w-full rounded-full text-sm md:text-base font-medium transition-all duration-200',
+                  'px-2 md:px-3 py-1 md:py-2',
                   a.variant === 'secondary'
-                    ? 'bg-white text-gray-900 border-2 border-gray-300 hover:bg-gray-50 hover:border-gray-400 shadow-sm'
-                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-md',
+                    ? 'bg-secondary/80 text-secondary-foreground border border-white/20 hover:bg-secondary hover:border-white/30 backdrop-blur-sm'
+                    : 'bg-primary/80 text-primary-foreground border border-white/20 hover:bg-primary hover:border-white/30 backdrop-blur-sm',
                   a.disabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg active:scale-95'
                 ].join(' ')}
               >
