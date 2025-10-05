@@ -6,6 +6,7 @@ import Tabs, { type Tab } from '../components/tabs/Tabs'
 import type { Company } from '../components/company-directory/data'
 import { useButtonBarActions } from '../components/button-bar/ButtonBarProvider'
 import { UserForm } from '../components/userform'
+import { InfoCard } from '../components/infocard'
 
 export default function DemoPage() {
   const [selectedCompanies, setSelectedCompanies] = useState<Company[]>([])
@@ -91,6 +92,45 @@ export default function DemoPage() {
   useButtonBarActions(buttonBarActions)
 
   const tabs: Tab[] = [
+    {
+      id: 'infocard-demo',
+      label: 'InfoCard',
+      content: (
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">InfoCard</h2>
+            <p className="text-muted-foreground">Mobile-first, responsive info card with media and children</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="card-elevated p-0">
+              <InfoCard
+                data={{
+                  id: 'hard-coded',
+                  title: 'Hard-coded InfoCard',
+                  body: 'Uses directly provided data and supports embedding other components as children.',
+                  media: [
+                    {
+                      kind: 'image',
+                      src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+                      alt: 'Mountains',
+                      aspectRatio: '16/9'
+                    }
+                  ]
+                }}
+              >
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <button className="btn-primary">Primary Action</button>
+                  <button className="btn-secondary">Secondary</button>
+                </div>
+              </InfoCard>
+            </div>
+            <div className="card-elevated p-0">
+              <InfoCard id="demo-infocard" />
+            </div>
+          </div>
+        </div>
+      )
+    },
     {
       id: 'userform-demo',
       label: 'UserForm',
