@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { ButtonBarProvider } from './components/button-bar/ButtonBarProvider'
+import ButtonBar from './components/button-bar/ButtonBar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ButtonBarProvider>
+          {children}
+          <ButtonBar />
+        </ButtonBarProvider>
+      </body>
     </html>
   )
 }

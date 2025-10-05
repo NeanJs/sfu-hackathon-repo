@@ -197,7 +197,7 @@ export default function CompanyDirectory({ selectable = false, onSelectionChange
               className={[
                 "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-2xl border border-border bg-background shadow-soft overflow-hidden hover:border-primary hover:shadow-medium transition-all duration-200",
                 selectable && "cursor-pointer",
-                isSelected && "border-primary bg-primary/5"
+                isSelected && "border-orange-400 bg-orange-50/50"
               ].join(' ')}
             >
               <LogoBanner company={c} />
