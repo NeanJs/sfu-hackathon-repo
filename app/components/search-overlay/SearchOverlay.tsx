@@ -23,7 +23,7 @@ export default function SearchOverlay() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-3 md:p-6" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-md" onClick={close} />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-md" onClick={close} />
       <div className="relative w-full max-w-2xl mx-auto">
         <div className="glass rounded-2xl shadow-hard">
           <div className="flex items-center gap-2 p-2 md:p-3">

@@ -611,7 +611,7 @@ export default function DemoPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pb-safe-area">
         <div className="text-center mb-12 animate-slide-up">
           <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
             <span className="text-sm font-medium text-primary">Component Demo</span>

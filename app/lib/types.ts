@@ -15,6 +15,7 @@ export interface ProfileQuestion {
 // --- COMPANY DATA MODELS ---
 export interface DiscoveryCompany {
   company_name: string;
+  category?: string;
   summary_violation: string; // 1-sentence summary of anti-SDG activity.
 }
 

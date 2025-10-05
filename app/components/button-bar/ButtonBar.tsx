@@ -11,7 +11,7 @@ export default function ButtonBar() {
   if (!actions || actions.length === 0) return null
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex items-end justify-center p-3 md:p-4" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 0px)' }}>
+    <div className="pointer-events-none fixed inset-x-0 bottom-20 sm:bottom-24 z-50 flex items-end justify-center p-3 md:p-4" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 0px)' }}>
       <div className="pointer-events-auto w-full">
         <div className="rounded-2xl border border-border bg-background/80 backdrop-blur-md shadow-medium">
           <div className={['grid gap-2 md:gap-3 px-2 md:px-3', 'py-1 md:py-2'].join(' ')} style={{ gridTemplateColumns: `repeat(${actions.length}, minmax(0, 1fr))` }}>

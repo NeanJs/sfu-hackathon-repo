@@ -18,6 +18,7 @@ const aiDiscoveryPrompt = {
           type: "OBJECT",
           properties: {
             company_name: { type: "STRING" },
+            category: { type: "STRING" },
             summary_violation: { type: "STRING" },
           },
         },

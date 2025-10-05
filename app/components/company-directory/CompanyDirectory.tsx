@@ -4,7 +4,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Company, CompanyCategory } from './data'
-import { queryCompanies, ALL_CATEGORIES } from './data'
+import { queryCompanies, getDiscoveryListTitle, getCategories } from './data'
 
 type LoadState = 'idle' | 'loading' | 'done'
 
@@ -54,6 +54,9 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
   const [loadState, setLoadState] = useState<LoadState>('idle')
   const [selectedCategory, setSelectedCategory] = useState<CompanyCategory | null>(null)
   const [selectedCompanies, setSelectedCompanies] = useState<Set<string>>(new Set())
+  const [title, setTitle] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [categories, setCategories] = useState<CompanyCategory[]>([])
 
   const sentinelRef = useRef<HTMLDivElement | null>(null)
   const hasMoreRef = useRef(hasMore)
@@ -81,20 +84,36 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
   const loadPage = useCallback(async (pageToLoad: number) => {
     if (loadStateRef.current === 'loading') return
     setLoadState('loading')
-    const result = await queryCompanies({ search: debouncedSearch, page: pageToLoad, pageSize: PAGE_SIZE, category: selectedCategory })
-    setItems((prev) => {
-      const existingIds = new Set(prev.map(item => item.id))
-      const newItems = result.items.filter(item => !existingIds.has(item.id))
-      return [...prev, ...newItems]
-    })
-    setHasMore(result.hasMore)
-    const nextState: LoadState = result.hasMore ? 'idle' : 'done'
-    setLoadState(nextState)
+    setError(null)
+    try {
+      const result = await queryCompanies({ search: debouncedSearch, page: pageToLoad, pageSize: PAGE_SIZE, category: selectedCategory })
+      setItems((prev) => {
+        const existingIds = new Set(prev.map(item => item.id))
+        const newItems = result.items.filter(item => !existingIds.has(item.id))
+        return [...prev, ...newItems]
+      })
+      setHasMore(result.hasMore)
+      const nextState: LoadState = result.hasMore ? 'idle' : 'done'
+      setLoadState(nextState)
+      const t = getDiscoveryListTitle() || ''
+      if (t) setTitle(t)
+    } catch (e) {
+      setError((e as Error).message)
+      setLoadState('done')
+    }
   }, [debouncedSearch, selectedCategory])
 
   useEffect(() => {
     loadPage(0)
   }, [loadPage])
+
+  useEffect(() => {
+    let mounted = true
+    getCategories()
+      .then((cats) => { if (mounted) setCategories(cats) })
+      .catch(() => {})
+    return () => { mounted = false }
+  }, [])
 
   useEffect(() => {
     if (!sentinelRef.current) return
@@ -168,6 +187,12 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
         </div>
       </div>
 
+      {title && (
+        <div className="mb-2 text-center">
+          <h2 className="text-xl sm:text-2xl font-bold">{title}</h2>
+        </div>
+      )}
+
       <div className="mb-4 sm:mb-6">
         <div className="mb-2 text-sm font-medium">Categories</div>
         <div role="group" aria-label="Filter by category" className="grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -178,13 +203,13 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
             className={[
               'inline-flex items-center justify-center rounded-full border px-3 py-2 text-xs sm:text-sm transition-colors',
               selectedCategory === null
-                ? 'bg-primary text-primary-foregrou`nd border-primary shadow-sm'
+                ? 'bg-primary text-primary-foreground border-primary shadow-sm'
                 : 'bg-background/80 text-foreground hover:bg-accent hover:text-accent-foreground'
             ].join(' ')}
           >
             All
           </button>
-          {ALL_CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               type="button"
@@ -221,6 +246,9 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
               <div className="px-3 py-4 text-center">
                 <h3 className="text-lg sm:text-xl font-bold">{c.name}</h3>
                 <p className="text-base text-muted-foreground">{c.category}</p>
+                {c.summary && (
+                  <p className="mt-1 text-sm text-muted-foreground line-clamp-3">{c.summary}</p>
+                )}
                 {isSelected && (
                   <div className="mt-2 text-sm text-primary font-medium">Selected</div>
                 )}
@@ -235,6 +263,9 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
       <div className="mt-4 flex items-center justify-center">
         {loadState === 'loading' && (
           <div className="text-sm text-muted-foreground">Loading…</div>
+        )}
+        {error && (
+          <div className="text-sm text-red-600">{error}</div>
         )}
         {loadState === 'done' && items.length === 0 && (
           <div className="text-sm text-muted-foreground">No results</div>
