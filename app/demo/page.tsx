@@ -140,7 +140,7 @@ export default function DemoPage() {
             <h2 className="text-3xl font-bold mb-2">UserForm</h2>
             <p className="text-muted-foreground">Mobile-first, multi-step form with bottom button bar</p>
           </div>
-          <div className="card-elevated p-4 sm:p-6">
+          <div className="card-elevated p-3 sm:p-4">
             <UserForm formId="demo-user-form" />
           </div>
         </div>
@@ -155,7 +155,7 @@ export default function DemoPage() {
             <h2 className="text-3xl font-bold mb-2">Company Directory</h2>
             <p className="text-muted-foreground">Basic company directory with search and filtering</p>
           </div>
-          <div className="card-elevated p-4 sm:p-6">
+          <div className="card-elevated p-3 sm:p-4">
             <CompanyDirectory selectable={false} />
           </div>
         </div>
@@ -170,11 +170,11 @@ export default function DemoPage() {
             <h2 className="text-3xl font-bold mb-2">Selectable Company Directory</h2>
             <p className="text-muted-foreground">Company directory with selection capabilities</p>
           </div>
-          <div className="card-elevated p-4 sm:p-6">
+          <div className="card-elevated p-3 sm:p-4">
             <CompanyDirectory selectable={true} multiselect={true} onSelectionChange={handleSelectionChange} />
           </div>
           {selectedCompanies.length > 0 && (
-            <div className="card-elevated p-4 sm:p-6">
+            <div className="card-elevated p-3 sm:p-4">
               <h3 className="text-lg font-semibold mb-3">Selected Companies ({selectedCompanies.length})</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {selectedCompanies.map((company) => (
@@ -198,11 +198,11 @@ export default function DemoPage() {
             <h2 className="text-3xl font-bold mb-2">Single Select Company Directory</h2>
             <p className="text-muted-foreground">Company directory with single selection mode</p>
           </div>
-          <div className="card-elevated p-4 sm:p-6">
+          <div className="card-elevated p-3 sm:p-4">
             <CompanyDirectory selectable={true} multiselect={false} onSelectionChange={handleSingleSelectionChange} />
           </div>
           {singleSelectedCompanies.length > 0 && (
-            <div className="card-elevated p-4 sm:p-6">
+            <div className="card-elevated p-3 sm:p-4">
               <h3 className="text-lg font-semibold mb-3">Selected Company ({singleSelectedCompanies.length})</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {singleSelectedCompanies.map((company) => (
@@ -226,7 +226,7 @@ export default function DemoPage() {
             <h2 className="text-3xl font-bold mb-2">Tabs Component</h2>
             <p className="text-muted-foreground">Scrollable tabs with responsive design</p>
           </div>
-          <div className="card-elevated p-4 sm:p-6">
+          <div className="card-elevated p-3 sm:p-4">
             <Tabs 
               tabs={[
                 {
@@ -295,7 +295,7 @@ export default function DemoPage() {
             <h2 className="text-3xl font-bold mb-2">Button Bar Component</h2>
             <p className="text-muted-foreground">Fixed bottom button bar with responsive design</p>
           </div>
-          <div className="card-elevated p-4 sm:p-6">
+          <div className="card-elevated p-3 sm:p-4">
             <div className="space-y-4">
               <h3 className="text-xl font-semibold">Features</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
@@ -371,7 +371,7 @@ export default function DemoPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12 animate-slide-up">
           <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
             <span className="text-sm font-medium text-primary">Component Demo</span>

@@ -18,7 +18,7 @@ export default function Home() {
       id: 'companies',
       label: 'Companies',
       content: (
-        <div className="card-elevated p-4 sm:p-6">
+        <div className="card-elevated p-3 sm:p-4">
           <CompanyDirectory selectable={false} />
         </div>
       )
@@ -27,7 +27,7 @@ export default function Home() {
       id: 'analytics',
       label: 'Analytics',
       content: (
-        <div className="card-elevated p-4 sm:p-6">
+        <div className="card-elevated p-3 sm:p-4">
           <div className="text-center py-12">
             <h3 className="text-2xl font-bold mb-4">Analytics Dashboard</h3>
             <p className="text-muted-foreground">Coming soon - detailed analytics and insights</p>
@@ -39,7 +39,7 @@ export default function Home() {
       id: 'reports',
       label: 'Reports',
       content: (
-        <div className="card-elevated p-4 sm:p-6">
+        <div className="card-elevated p-3 sm:p-4">
           <div className="text-center py-12">
             <h3 className="text-2xl font-bold mb-4">Reports</h3>
             <p className="text-muted-foreground">Generate and download transparency reports</p>
@@ -51,7 +51,7 @@ export default function Home() {
       id: 'settings',
       label: 'Settings',
       content: (
-        <div className="card-elevated p-4 sm:p-6">
+        <div className="card-elevated p-3 sm:p-4">
           <div className="text-center py-12">
             <h3 className="text-2xl font-bold mb-4">Settings</h3>
             <p className="text-muted-foreground">Configure your preferences and notifications</p>
@@ -63,7 +63,7 @@ export default function Home() {
       id: 'help',
       label: 'Help & Support',
       content: (
-        <div className="card-elevated p-4 sm:p-6">
+        <div className="card-elevated p-3 sm:p-4">
           <div className="text-center py-12">
             <h3 className="text-2xl font-bold mb-4">Help & Support</h3>
             <p className="text-muted-foreground">Get help and contact our support team</p>
@@ -75,7 +75,7 @@ export default function Home() {
       id: 'about',
       label: 'About',
       content: (
-        <div className="card-elevated p-4 sm:p-6">
+        <div className="card-elevated p-3 sm:p-4">
           <div className="text-center py-12">
             <h3 className="text-2xl font-bold mb-4">About Transparency Ledger</h3>
             <p className="text-muted-foreground">Learn more about our mission and values</p>
@@ -87,7 +87,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12 animate-slide-up">
           <div className="inline-flex items-center justify-center px-6 py-3 mb-8 bg-primary/10 border border-primary/20 rounded-full backdrop-blur-sm">
             <span className="text-sm font-medium text-primary">Political Transparency</span>

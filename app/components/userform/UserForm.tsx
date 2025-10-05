@@ -163,7 +163,7 @@ export default function UserForm({ formId, initialValues, onSubmitted, className
           ))}
         </div>
 
-        <div className="card-elevated p-4 sm:p-6">
+        <div className="card-elevated p-3 sm:p-4">
           <div className="mb-4">
             <h3 className="text-xl font-semibold">{activeStep?.title}</h3>
             {activeStep?.description && (

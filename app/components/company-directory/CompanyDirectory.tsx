@@ -218,7 +218,7 @@ export default function CompanyDirectory({ selectable = false, multiselect = tru
               ].join(' ')}
             >
               <LogoBanner company={c} />
-              <div className="px-4 py-5 text-center">
+              <div className="px-3 py-4 text-center">
                 <h3 className="text-lg sm:text-xl font-bold">{c.name}</h3>
                 <p className="text-base text-muted-foreground">{c.category}</p>
                 {isSelected && (

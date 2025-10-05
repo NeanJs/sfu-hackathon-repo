@@ -37,7 +37,7 @@ export default function InfoCard({ id, data, className = '', children }: InfoCar
   if (!effectiveData && loading) {
     return (
       <section className={[`w-full h-full`, className].join(' ')}>
-        <div className="card-elevated w-full h-full p-4 sm:p-6 animate-in">
+        <div className="card-elevated w-full h-full p-3 sm:p-4 animate-in">
           <div className="space-y-4">
             <div className="h-6 w-40 bg-muted animate-pulse rounded" />
             <div className="h-4 w-64 bg-muted animate-pulse rounded" />
@@ -72,7 +72,7 @@ export default function InfoCard({ id, data, className = '', children }: InfoCar
           </div>
         )}
 
-        <div className="p-4 sm:p-6">
+        <div className="p-3 sm:p-4">
           <div className="mb-3 sm:mb-4">
             <h3 className="text-2xl sm:text-3xl font-bold leading-tight">{title}</h3>
           </div>

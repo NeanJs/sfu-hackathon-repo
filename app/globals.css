@@ -62,7 +62,7 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply text-primary-foreground focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200 font-medium px-6 py-3 rounded-xl shadow-soft hover:shadow-medium;
+    @apply text-primary-foreground focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200 font-medium px-4 py-2 rounded-xl shadow-soft hover:shadow-medium;
     background-color: var(--primary);
   }
   
@@ -71,7 +71,7 @@ body {
   }
   
   .btn-secondary {
-    @apply text-secondary-foreground focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200 font-medium px-6 py-3 rounded-xl border border-border shadow-soft hover:shadow-medium;
+    @apply text-secondary-foreground focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-all duration-200 font-medium px-4 py-2 rounded-xl border border-border shadow-soft hover:shadow-medium;
     background-color: var(--secondary);
   }
   
