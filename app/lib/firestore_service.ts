@@ -38,9 +38,19 @@ function initializeFirebase() {
 const ANONYMOUS_USER_ID_KEY = "anonymous_user_id";
 
 function getAnonymousUserId(): string {
+  // Check if we're on the server side
+  if (typeof window === "undefined") {
+    return `server-${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(2, 15)}`;
+  }
+
+  // Client-side code
   let anonymousId = localStorage.getItem(ANONYMOUS_USER_ID_KEY);
   if (!anonymousId) {
-    anonymousId = `anon-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+    anonymousId = `anon-${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(2, 15)}`;
     localStorage.setItem(ANONYMOUS_USER_ID_KEY, anonymousId);
   }
   return anonymousId;
@@ -54,7 +64,9 @@ const getOnboardingQuestionsDocRef = () => {
  * Saves the onboarding questions and their criteria to Firestore.
  * @param questions The array of ProfileQuestion objects to save.
  */
-export async function saveOnboardingQuestions(questions: ProfileQuestion[]): Promise<void> {
+export async function saveOnboardingQuestions(
+  questions: ProfileQuestion[]
+): Promise<void> {
   initializeFirebase();
   try {
     const docRef = getOnboardingQuestionsDocRef();
@@ -70,7 +82,9 @@ export async function saveOnboardingQuestions(questions: ProfileQuestion[]): Pro
  * Loads the onboarding questions and their criteria from Firestore.
  * @returns {Promise<ProfileQuestion[] | null>} The array of ProfileQuestion objects or null if not found.
  */
-export async function loadOnboardingQuestions(): Promise<ProfileQuestion[] | null> {
+export async function loadOnboardingQuestions(): Promise<
+  ProfileQuestion[] | null
+> {
   initializeFirebase();
   try {
     const docRef = getOnboardingQuestionsDocRef();
@@ -143,10 +157,7 @@ export function getCurrentUserId(): string | null {
 const getPreferencesDocRef = () => {
   const userId = getCurrentUserId() || getAnonymousUserId(); // Use anonymous ID if not authenticated
   if (!userId) throw new Error("User ID not available.");
-  return doc(
-    db,
-    `artifacts/${__app_id}/users/${userId}/preferences/user_profile`
-  );
+  return doc(db, `user_preferences/${userId}`);
 };
 
 /**
