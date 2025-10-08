@@ -1,27 +1,121 @@
-Inspiration
-The inspiration behind Leadger is to empower users to take effective action by identifying and supporting companies aligned with their personal values, while offering alternatives to companies whose stocks, deals, or political links contradict their beliefs. This project stems from the global necessity to act consciously amid ongoing conflicts and social issues. Additionally, Leadger aims to provide companies, governments, and analysts with valuable, ethically sourced information to help shape policies, financial strategies, and economic forecasting by gaining a deeper understanding of users' value systems. Leadger itself remains neutral, tailoring results based solely on each user’s unique profile.
+# 🪙 Leadger — Lead Your Spending, Influence Change
 
-What it does
-Leadger helps users understand their social and political positions and purchasing behavior to identify companies they engage with that may not align with their values. It then finds local, sustainable, and viable alternatives that satisfy their needs equivalently. Beyond individual use, Leadger aggregates and analyzes data to generate anonymized consumer insights for companies, governments, analysts, financiers, and conglomerates. These insights reveal “unspoken opinions” and trends, enabling more reliable market condition forecasts.
+**Built at SFU StormHacks 2025**  
+Empowering ethical spending and investment through personalized AI insights — all while prioritizing user privacy and data transparency.
 
-How we built it
-Our team applied Strategizer methodologies to develop Leadger’s business idea and feasibility study, focusing on the most effective value proposition. We used Fishbone diagram principles and MVP conceptualization, emphasizing social impact, economic potential, and alignment with UN Sustainable Development Goals. Prototype versions were iterated using the Gemini API (details pending), and we sought continuous feedback from volunteer stormhackers and mentors across business, technological, usability, and design dimensions.
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Gemini](https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google&logoColor=white)
 
-Challenges we ran into
-We faced limited benchmarking opportunities due to a lack of similar projects. Data scraping complexities and managing version control with shared Git repositories, alongside collaborative coding agents, were also significant hurdles. Additionally, fluctuating prioritization of feature values during development required ongoing adjustments.
+---
 
-Accomplishments that we're proud of
-We have successfully developed a functional prototype incorporating dynamic profiling and personalized company alignment features. Iterations based on community and mentor feedback strengthened usability and user experience. Our team’s multidisciplinary collaboration proved crucial in navigating complex ethical and technical considerations.
+## ✨ Overview
 
-What we learned
-We gained valuable insights into blending technology with social impact, particularly in balancing user privacy with data utility. The iterative prototyping process reinforced the importance of agile development and stakeholder engagement to refine value propositions. Understanding the nuances of ethical consumerism deepened our commitment to creating transparent, user-centered solutions.
+**Leadger** empowers users to make conscious spending and investment decisions by aligning their actions with their personal values.  
+Through ethical data analytics and AI-driven recommendations, Leadger helps people **see the impact of their purchases**, discover **sustainable alternatives**, and contribute to a more transparent economy.
 
-What's next
-We plan to validate Leadger’s business potential through expert consultations in data protection and digital law regarding data collection, storage, and monetization. We will continue testing the project’s scope as an agent of social change by empowering uncoordinated collaborative economic action. This enables people to pressure corporations and governments with their wallets, redistributing value to local businesses and sustainable alternatives.
+---
 
-Built With
-firebase
-gemini
-nextjs
-tailwind
-Try it out - www.leadger.tech
+## 🚀 Features
+
+- 🧭 **Ethical Profiling:** Analyze your spending habits and company interactions based on your values.  
+- ♻️ **Smart Alternatives:** Discover sustainable and local substitutes for the brands you use.  
+- 🔒 **Privacy-First Design:** Data is anonymized and never sold or shared without consent.  
+- 📊 **Data for Good:** Businesses and analysts access only aggregated insights to improve transparency.  
+- 🌍 **Social Impact Driven:** Encourages users to “vote with their wallets” for a better global economy.  
+
+---
+
+## 🧠 How It Works
+
+1. **Profile Creation:** Users complete a quick questionnaire to define their social and ethical priorities.  
+2. **AI Analysis:** Gemini API evaluates brands and spending behaviors based on ethical metrics.  
+3. **Recommendations:** Leadger suggests more aligned alternatives while maintaining usability and personalization.  
+4. **Insight Dashboard:** Businesses access anonymized trend data to guide responsible decisions.  
+
+---
+
+## 🧩 Tech Stack
+
+| Layer | Technology |
+|-------|-------------|
+| **Frontend** | Next.js, Tailwind CSS |
+| **Backend** | Firebase |
+| **AI Layer** | Gemini API |
+| **Design Tools** | Figma, Strategizer Methodologies |
+
+---
+
+## 🏗️ Architecture
+
+---
+
+## 🧠 Built With Methodologies
+
+- **Strategizer Canvas** for value proposition design  
+- **Fishbone Diagram** for root-cause and opportunity analysis  
+- **MVP Conceptualization** focused on usability and ethical impact  
+- **Agile Iteration** and feedback cycles with mentors and volunteers  
+
+---
+
+## 🏆 Accomplishments
+
+- ✅ Developed a functional prototype with **dynamic ethical profiling**  
+- ✅ Designed a **clean, privacy-aware UI** powered by Next.js & Tailwind  
+- ✅ Integrated **Gemini API** for personalized ethical insights  
+- ✅ Received positive feedback from mentors for **innovation and real-world applicability**  
+
+---
+
+## 💡 What We Learned
+
+- How to balance **AI-driven personalization** with **user privacy**  
+- The importance of **ethical design thinking** in fintech  
+- Applying **agile methods** to prototype complex, value-driven systems  
+- The challenges of building with **limited data transparency models**
+
+---
+
+## 🔮 What’s Next
+
+- ⚖️ Legal consultations on data protection and digital law  
+- 📱 Launch mobile and PWA versions  
+- 📊 Expand the data layer for real-time ESG and sustainability metrics  
+- 🌎 Validate business potential with industry experts  
+
+---
+
+## 🌱 Inspiration
+
+The global movement toward conscious consumerism inspired us to create a platform where **people can pressure corporations and governments through collective, ethical spending** — redistributing value toward local and sustainable alternatives.
+
+---
+
+## 👥 Team
+
+| Name | Role |
+|------|------|
+| **Nijan Adhikari** | Backend & AI Integration |
+| **Uzay Yillidrim** | Frontend |
+| **Rhodriche** | Design Implementation |
+| **David** | Idea generation & Business implementation |
+
+---
+
+## 🔗 Links
+
+- 🌐 [Devpost Submission](https://devpost.com/software/leadger-lead-your-spending-influence-change)  
+- 💻 [Live Prototype](https://leader.tech)  
+
+---
+
+## 📄 License
+
+Built for STORMHACKS 2025
+
+---
+
+> _“Leadger aims to turn everyday spending into a force for global change — where every purchase is a vote for a better world.”_
+
