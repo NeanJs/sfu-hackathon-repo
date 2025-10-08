@@ -107,7 +107,7 @@ The global movement toward conscious consumerism inspired us to create a platfor
 ## 🔗 Links
 
 - 🌐 [Devpost Submission](https://devpost.com/software/leadger-lead-your-spending-influence-change)  
-- 💻 [Live Prototype](https://leader.tech)  
+- 💻 [Live Prototype](https://leadger.tech)  
 
 ---
 
